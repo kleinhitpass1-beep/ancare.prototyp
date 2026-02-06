@@ -150,19 +150,19 @@ function seedPodcastEpisodes(){
 
   const now = Date.now();
   const demo = [
-    {
-      id: "e1",
-      number: "01",
-      title: "Der Ankerstick im Detail",
-      teaser: "Wir erforschen worum es sich bei dem Produkt: "Ankerstick" handelt.",
-      duration: "12 min",
-      publishedAt: now - 10 * 86400000,
-      description: "Was und wer steckt hinter dieser faszinierenden Idee?.",
-      audioUrl: "episode01.mp3",
-      spotifyUrl: "#",
-      appleUrl: "#",
-      webUrl: "#"
-    },
+{
+  id: "e1",
+  number: "01",
+  title: "Der Ankerstick im Detail",
+  teaser: "Wir erforschen worum es sich bei dem Produkt Ankerstick handelt.",
+  duration: "12 min",
+  publishedAt: now - 10 * 86400000,
+  description: "Was und wer steckt hinter dieser faszinierenden Idee?",
+  audioUrl: "episode01.mp3",
+  spotifyUrl: "#",
+  appleUrl: "#",
+  webUrl: "#"
+},
     {
       id: "e2",
       number: "02",
