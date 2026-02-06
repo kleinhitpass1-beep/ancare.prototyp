@@ -40,8 +40,7 @@
             <div class="kicker"><span class="dot" aria-hidden="true"></span> Prototype, Episoden als Platzhalter</div>
             <h1 style="margin-bottom:10px">Podcast</h1>
             <p class="lead" style="margin-bottom:0">
-              Kurze Impulse für Ruhe, Selbstwahrnehmung und klare nächste Schritte.
-              Professionell, respektvoll und ohne leere Versprechen.
+              Kurze Impulse für Ruhe, Selbstwahrnehmung und klare nächste Schritte. Professionell, respektvoll und ohne leere Versprechen.
             </p>
           </div>
         </div>
@@ -51,22 +50,35 @@
     <section class="section">
       <div class="container">
         <div class="productGrid">
+          <!-- Left: Episodes -->
           <div class="card shadowBig">
             <div class="mediaTop">
               <div>
                 <strong>Episoden</strong><br />
                 <span>Wähle eine Episode aus</span>
               </div>
-              <button class="btn btnSmall" type="button" id="seed">Beispiele laden</button>
+
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end">
+                <button class="btn btnSmall" type="button" id="seed">Beispiele laden</button>
+                <button class="btn btnSmall btnGhost" type="button" id="resetPodcast">Reset</button>
+              </div>
             </div>
+
             <div class="pad" id="episodeList"></div>
           </div>
 
+          <!-- Right: Player -->
           <aside class="card shadowBig">
             <div class="padLg">
               <div class="kicker"><span class="dot" aria-hidden="true"></span> Jetzt abspielen</div>
-              <div style="font-weight:900; font-size:18px; margin-top:12px" id="epTitle">Keine Episode ausgewählt</div>
-              <div style="color:var(--muted); margin-top:8px" id="epMeta">Wähle links eine Episode.</div>
+
+              <div style="font-weight:900; font-size:18px; margin-top:12px" id="epTitle">
+                Keine Episode ausgewählt
+              </div>
+
+              <div style="color:var(--muted); margin-top:8px" id="epMeta">
+                Wähle links eine Episode.
+              </div>
 
               <div style="margin-top:14px">
                 <audio id="player" controls style="width:100%"></audio>
@@ -83,6 +95,7 @@
               </div>
             </div>
           </aside>
+
         </div>
       </div>
     </section>
@@ -102,15 +115,25 @@
     </footer>
   </main>
 
+  <!-- App logic -->
   <script src="app.js"></script>
+
+  <!-- Page logic -->
   <script>
     function escapeHtml(s){
-      return String(s || "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+      return String(s || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
     function renderEpisodes(){
       const list = document.getElementById("episodeList");
-      const eps = loadPodcastEpisodes();
+      const eps = (typeof loadPodcastEpisodes === "function") ? loadPodcastEpisodes() : [];
+
+      if(!list) return;
 
       if(eps.length === 0){
         list.innerHTML = `<div style="color:var(--muted)">Noch keine Episoden. Klicke auf Beispiele laden.</div>`;
@@ -125,7 +148,7 @@
                 <div class="kicker" style="margin-bottom:10px"><span class="dot" aria-hidden="true"></span> Episode ${escapeHtml(ep.number)}</div>
                 <div style="font-weight:900; font-size:16px">${escapeHtml(ep.title)}</div>
                 <div style="color:var(--muted); font-size:13.5px; margin-top:6px; line-height:1.55">
-                  ${escapeHtml(ep.teaser)}
+                  ${escapeHtml(ep.teaser || "")}
                 </div>
               </div>
               <div style="display:flex; gap:10px; align-items:center">
@@ -138,37 +161,47 @@
     }
 
     function selectEpisode(id){
-      const eps = loadPodcastEpisodes();
+      const eps = (typeof loadPodcastEpisodes === "function") ? loadPodcastEpisodes() : [];
       const ep = eps.find(e => e.id === id);
       if(!ep) return;
 
-      document.getElementById("epTitle").textContent = ep.title;
-      document.getElementById("epMeta").textContent = `Episode ${ep.number} · ${ep.duration} · ${new Date(ep.publishedAt).toLocaleDateString("de-DE")}`;
-      document.getElementById("epDesc").textContent = ep.description;
+      document.getElementById("epTitle").textContent = ep.title || "Episode";
+      document.getElementById("epMeta").textContent =
+        `Episode ${ep.number || ""} · ${ep.duration || ""} · ${ep.publishedAt ? new Date(ep.publishedAt).toLocaleDateString("de-DE") : ""}`;
+
+      document.getElementById("epDesc").textContent = ep.description || "";
 
       const player = document.getElementById("player");
       player.src = ep.audioUrl || "";
+
       if(ep.audioUrl){
         player.play().catch(() => {});
       }
 
-      const s = document.getElementById("linkSpotify");
-      const a = document.getElementById("linkApple");
-      const w = document.getElementById("linkWeb");
-      s.href = ep.spotifyUrl || "#";
-      a.href = ep.appleUrl || "#";
-      w.href = ep.webUrl || "#";
+      document.getElementById("linkSpotify").href = ep.spotifyUrl || "#";
+      document.getElementById("linkApple").href = ep.appleUrl || "#";
+      document.getElementById("linkWeb").href = ep.webUrl || "#";
     }
 
+    // Buttons
     document.getElementById("seed").addEventListener("click", () => {
-      seedPodcastEpisodes();
+      if(typeof seedPodcastEpisodes === "function"){
+        seedPodcastEpisodes();
+      }
       renderEpisodes();
     });
 
+    document.getElementById("resetPodcast").addEventListener("click", () => {
+      localStorage.removeItem("anker_podcast_v1");
+      alert("Podcast Daten zurückgesetzt. Jetzt bitte auf „Beispiele laden“ klicken.");
+      location.reload();
+    });
+
     document.addEventListener("DOMContentLoaded", () => {
-      setCartBadge();
+      if(typeof setCartBadge === "function") setCartBadge();
       renderEpisodes();
     });
   </script>
 </body>
 </html>
+
