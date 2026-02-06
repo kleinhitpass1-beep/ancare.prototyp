@@ -1,117 +1,174 @@
-const COMMUNITY_KEY = "anker_community_v1";
-const PODCAST_KEY = "anker_podcast_v1";
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ankerstick Podcast | Prototype</title>
+  <meta name="description" content="Podcast Bereich für Ankerstick. Episoden Übersicht, Player, Links. Prototype." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
 
-function loadCommunityPosts(){
-  try{
-    return JSON.parse(localStorage.getItem(COMMUNITY_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
+<body>
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html" aria-label="Start">
+          <span class="mark" aria-hidden="true"></span>
+          <span>
+            Ankerstick
+            <small>Podcast</small>
+          </span>
+        </a>
 
-function saveCommunityPosts(posts){
-  localStorage.setItem(COMMUNITY_KEY, JSON.stringify(posts));
-}
+        <nav class="links" aria-label="Navigation">
+          <a class="link" href="index.html">Shop</a>
+          <a class="link" href="product.html">Produkt</a>
+          <a class="link" href="community.html">Community</a>
+          <a class="btn btnPrimary" href="podcast.html">
+            Podcast <span class="badge" id="cartCount">0</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
 
-function seedCommunityPosts(){
-  const existing = loadCommunityPosts();
-  if(existing.length > 0) return;
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="card shadowBig">
+          <div class="padLg">
+            <div class="kicker"><span class="dot" aria-hidden="true"></span> Prototype, Episoden als Platzhalter</div>
+            <h1 style="margin-bottom:10px">Podcast</h1>
+            <p class="lead" style="margin-bottom:0">
+              Kurze Impulse für Ruhe, Selbstwahrnehmung und klare nächste Schritte.
+              Professionell, respektvoll und ohne leere Versprechen.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  const now = Date.now();
-  const demo = [
-    {
-      id: "p1",
-      author: "Team Anker",
-      topic: "rituale",
-      title: "Mein Zwei Minuten Reset vor Meetings",
-      body: "Kurz riechen, 4 6 Atmung, dann eine klare nächste Aktion. Hilft mir, nicht zu hetzen.",
-      likes: 3,
-      comments: [{ author: "Maurice", text: "Sehr gut. Genau so simpel muss es sein.", createdAt: now - 20000 }],
-      createdAt: now - 86400000
-    },
-    {
-      id: "p2",
-      author: "Anonym",
-      topic: "schlaf",
-      title: "Abendroutine ohne Druck",
-      body: "Ich mache nur zwei Dinge: Licht runter und einen ruhigen Moment. Alles andere ist Bonus.",
-      likes: 5,
-      comments: [],
-      createdAt: now - 3600000
-    },
-    {
-      id: "p3",
-      author: "Community",
-      topic: "fragen",
-      title: "Welche Situationen sind für euch am schwierigsten",
-      body: "Ich suche konkrete Ideen: morgens, unterwegs, vor Gesprächen. Was triggert euch am meisten",
-      likes: 1,
-      comments: [],
-      createdAt: now - 120000
+    <section class="section">
+      <div class="container">
+        <div class="productGrid">
+          <div class="card shadowBig">
+            <div class="mediaTop">
+              <div>
+                <strong>Episoden</strong><br />
+                <span>Wähle eine Episode aus</span>
+              </div>
+              <button class="btn btnSmall" type="button" id="seed">Beispiele laden</button>
+            </div>
+            <div class="pad" id="episodeList"></div>
+          </div>
+
+          <aside class="card shadowBig">
+            <div class="padLg">
+              <div class="kicker"><span class="dot" aria-hidden="true"></span> Jetzt abspielen</div>
+              <div style="font-weight:900; font-size:18px; margin-top:12px" id="epTitle">Keine Episode ausgewählt</div>
+              <div style="color:var(--muted); margin-top:8px" id="epMeta">Wähle links eine Episode.</div>
+
+              <div style="margin-top:14px">
+                <audio id="player" controls style="width:100%"></audio>
+              </div>
+
+              <div class="fineprint" id="epDesc" style="margin-top:14px">
+                Hinweis: Im Prototyp sind Audio Dateien optional. Später kannst du Spotify, Apple Podcasts oder eine RSS Quelle anbinden.
+              </div>
+
+              <div class="ctaRow" style="justify-content:flex-start">
+                <a class="btn btnSmall" id="linkSpotify" href="#" target="_blank" rel="noreferrer">Spotify</a>
+                <a class="btn btnSmall" id="linkApple" href="#" target="_blank" rel="noreferrer">Apple Podcasts</a>
+                <a class="btn btnSmall" id="linkWeb" href="#" target="_blank" rel="noreferrer">Web</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="foot">
+          <div>
+            <strong style="color:var(--text)">Ankerstick Podcast</strong><br />
+            <span>Prototype Bereich für Content und Markenaufbau</span>
+          </div>
+          <div>
+            <a class="link" href="community.html">Zur Community</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    function escapeHtml(s){
+      return String(s || "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
-  ];
 
-  saveCommunityPosts(demo);
-}
+    function renderEpisodes(){
+      const list = document.getElementById("episodeList");
+      const eps = loadPodcastEpisodes();
 
-function loadPodcastEpisodes(){
-  try{
-    return JSON.parse(localStorage.getItem(PODCAST_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
+      if(eps.length === 0){
+        list.innerHTML = `<div style="color:var(--muted)">Noch keine Episoden. Klicke auf Beispiele laden.</div>`;
+        return;
+      }
 
-function savePodcastEpisodes(eps){
-  localStorage.setItem(PODCAST_KEY, JSON.stringify(eps));
-}
-
-function seedPodcastEpisodes(){
-  const existing = loadPodcastEpisodes();
-  if(existing.length > 0) return;
-
-  const now = Date.now();
-  const demo = [
-    {
-      id: "e1",
-      number: "01",
-      title: "Zurück in den Moment in 120 Sekunden",
-      teaser: "Ein kurzer Ablauf, um aus dem Kopf in den Körper zu kommen.",
-      duration: "6 min",
-      publishedAt: now - 10 * 86400000,
-      description: "Eine kompakte Episode mit einem klaren Schritt für Schritt Ritual. Ziel: mehr Ruhe und Orientierung im Alltag.",
-      audioUrl: "",
-      spotifyUrl: "#",
-      appleUrl: "#",
-      webUrl: "#"
-    },
-    {
-      id: "e2",
-      number: "02",
-      title: "Unruhe verstehen, ohne sie zu bekämpfen",
-      teaser: "Warum Kontrolle oft Druck erzeugt und was besser funktioniert.",
-      duration: "12 min",
-      publishedAt: now - 6 * 86400000,
-      description: "Du bekommst eine ruhige Perspektive und zwei praktische Mikro Impulse, die sich leicht umsetzen lassen.",
-      audioUrl: "",
-      spotifyUrl: "#",
-      appleUrl: "#",
-      webUrl: "#"
-    },
-    {
-      id: "e3",
-      number: "03",
-      title: "Fokus starten: die erste Minute zählt",
-      teaser: "Eine kleine Startsequenz für Deep Work und saubere Übergänge.",
-      duration: "9 min",
-      publishedAt: now - 2 * 86400000,
-      description: "Wir bauen eine kurze Startsequenz, die dich in Handlung bringt. Kein Perfektionismus, nur Richtung.",
-      audioUrl: "",
-      spotifyUrl: "#",
-      appleUrl: "#",
-      webUrl: "#"
+      list.innerHTML = eps.map(ep => `
+        <div class="card" style="margin-bottom:12px">
+          <div class="pad">
+            <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap">
+              <div>
+                <div class="kicker" style="margin-bottom:10px"><span class="dot" aria-hidden="true"></span> Episode ${escapeHtml(ep.number)}</div>
+                <div style="font-weight:900; font-size:16px">${escapeHtml(ep.title)}</div>
+                <div style="color:var(--muted); font-size:13.5px; margin-top:6px; line-height:1.55">
+                  ${escapeHtml(ep.teaser)}
+                </div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center">
+                <button class="btn btnPrimary btnSmall" type="button" onclick="selectEpisode('${ep.id}')">Abspielen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join("");
     }
-  ];
 
-  savePodcastEpisodes(demo);
-}
+    function selectEpisode(id){
+      const eps = loadPodcastEpisodes();
+      const ep = eps.find(e => e.id === id);
+      if(!ep) return;
+
+      document.getElementById("epTitle").textContent = ep.title;
+      document.getElementById("epMeta").textContent = `Episode ${ep.number} · ${ep.duration} · ${new Date(ep.publishedAt).toLocaleDateString("de-DE")}`;
+      document.getElementById("epDesc").textContent = ep.description;
+
+      const player = document.getElementById("player");
+      player.src = ep.audioUrl || "";
+      if(ep.audioUrl){
+        player.play().catch(() => {});
+      }
+
+      const s = document.getElementById("linkSpotify");
+      const a = document.getElementById("linkApple");
+      const w = document.getElementById("linkWeb");
+      s.href = ep.spotifyUrl || "#";
+      a.href = ep.appleUrl || "#";
+      w.href = ep.webUrl || "#";
+    }
+
+    document.getElementById("seed").addEventListener("click", () => {
+      seedPodcastEpisodes();
+      renderEpisodes();
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setCartBadge();
+      renderEpisodes();
+    });
+  </script>
+</body>
+</html>
