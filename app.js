@@ -153,12 +153,12 @@ function seedPodcastEpisodes(){
     {
       id: "e1",
       number: "01",
-      title: "Zurück in den Moment in 120 Sekunden",
-      teaser: "Ein kurzer Ablauf, um aus dem Kopf in den Körper zu kommen.",
-      duration: "6 min",
+      title: "Der Ankerstick im Detail",
+      teaser: "Wir erforschen worum es sich bei dem Produkt: "Ankerstick" handelt.",
+      duration: "12 min",
       publishedAt: now - 10 * 86400000,
-      description: "Eine kompakte Episode mit einem klaren Schritt für Schritt Ritual. Ziel: mehr Ruhe und Orientierung im Alltag.",
-      audioUrl: "",
+      description: "Was und wer steckt hinter dieser faszinierenden Idee?.",
+      audioUrl: "episode01.mp3",
       spotifyUrl: "#",
       appleUrl: "#",
       webUrl: "#"
