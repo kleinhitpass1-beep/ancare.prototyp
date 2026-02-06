@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ankerstick Community | Prototype</title>
+  <meta name="description" content="Community Prototype für Ankerstick. Feed, Kategorien, Beiträge und Kommentare im Browser gespeichert." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html" aria-label="Start">
+          <span class="mark" aria-hidden="true"></span>
+          <span>
+            Ankerstick
+            <small>Community</small>
+          </span>
+        </a>
+
+        <nav class="links" aria-label="Navigation">
+          <a class="link" href="index.html">Shop</a>
+          <a class="link" href="product.html">Produkt</a>
+          <a class="link" href="podcast.html">Podcast</a>
+          <a class="btn btnPrimary" href="community.html">
+            Community <span class="badge" id="cartCount">0</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="card shadowBig">
+          <div class="padLg">
+            <div class="kicker"><span class="dot" aria-hidden="true"></span> Prototype, Inhalte werden nur lokal gespeichert</div>
+            <h1 style="margin-bottom:10px">Community</h1>
+            <p class="lead" style="margin-bottom:0">
+              Ein ruhiger Ort für Austausch, Routinen, Erfahrungen und kleine Schritte zurück in den Moment.
+              Kein Ersatz für medizinische oder psychotherapeutische Behandlung.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="community">
+      <div class="container">
+        <div class="sectionHeader">
+          <div>
+            <h2>Feed</h2>
+            <p>Du kannst Beiträge erstellen, filtern und kommentieren. Alles bleibt im Browser, ohne Login.</p>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end">
+            <button class="btn" type="button" id="openPost">Beitrag erstellen</button>
+            <button class="btn btnPrimary" type="button" id="seed">Beispiele laden</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="pad" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end">
+            <div style="flex:1; min-width:220px">
+              <label for="search">Suche</label>
+              <input id="search" placeholder="Zum Beispiel: Abendroutine, Atmung, Reset" />
+            </div>
+
+            <div style="min-width:220px">
+              <label for="topic">Kategorie</label>
+              <select id="topic">
+                <option value="all" selected>Alle</option>
+                <option value="rituale">Rituale</option>
+                <option value="alltag">Alltag und Stress</option>
+                <option value="fokus">Fokus</option>
+                <option value="schlaf">Schlaf</option>
+                <option value="fragen">Fragen</option>
+              </select>
+            </div>
+
+            <div style="min-width:180px">
+              <label for="sort">Sortierung</label>
+              <select id="sort">
+                <option value="new" selected>Neueste</option>
+                <option value="top">Meiste Likes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div id="feed"></div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="foot">
+          <div>
+            <strong style="color:var(--text)">Ankerstick Community</strong><br />
+            <span>Prototype ohne Backend, nur für User Flow Tests</span>
+          </div>
+          <div>
+            <a class="link" href="index.html">Zurück zum Shop</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Modal -->
+  <div id="modalOverlay" style="display:none; position:fixed; inset:0; background:rgba(11,27,58,.42); z-index:200; padding:18px; align-items:center; justify-content:center;">
+    <div class="card shadowBig" style="width:min(820px, 96vw);">
+      <div class="padLg" style="border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:10px; align-items:center;">
+        <strong>Neuer Beitrag</strong>
+        <button class="btn btnSmall" type="button" id="closeModal">Schließen</button>
+      </div>
+      <div class="padLg">
+        <div class="infoGrid" style="grid-template-columns: 1fr 1fr;">
+          <div>
+            <label for="author">Name</label>
+            <input id="author" placeholder="Zum Beispiel: Maurice" />
+          </div>
+          <div>
+            <label for="topicNew">Kategorie</label>
+            <select id="topicNew">
+              <option value="rituale">Rituale</option>
+              <option value="alltag">Alltag und Stress</option>
+              <option value="fokus">Fokus</option>
+              <option value="schlaf">Schlaf</option>
+              <option value="fragen">Fragen</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="title">Titel</label>
+          <input id="title" placeholder="Was möchtest du teilen oder fragen" />
+        </div>
+
+        <div class="field">
+          <label for="body">Text</label>
+          <input id="body" placeholder="Kurz und klar. Was hat dir geholfen oder was brauchst du" />
+        </div>
+
+        <div class="ctaRow" style="margin-top:14px; justify-content:flex-end">
+          <button class="btn" type="button" id="cancel">Abbrechen</button>
+          <button class="btn btnPrimary" type="button" id="publish">Veröffentlichen</button>
+        </div>
+
+        <div class="fineprint">
+          Hinweis: Community Inhalte sind kein Ersatz für professionelle Hilfe. Bei akuten Krisen oder starker Belastung wende dich bitte an geeignete Stellen.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const TOPIC_LABEL = {
+      rituale: "Rituale",
+      alltag: "Alltag und Stress",
+      fokus: "Fokus",
+      schlaf: "Schlaf",
+      fragen: "Fragen"
+    };
+
+    function escapeHtml(s){
+      return String(s || "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
+
+    function renderFeed(){
+      const feedEl = document.getElementById("feed");
+      const q = (document.getElementById("search").value || "").toLowerCase().trim();
+      const topic = document.getElementById("topic").value;
+      const sort = document.getElementById("sort").value;
+
+      let posts = loadCommunityPosts();
+
+      if(topic !== "all"){
+        posts = posts.filter(p => p.topic === topic);
+      }
+      if(q){
+        posts = posts.filter(p =>
+          (p.title || "").toLowerCase().includes(q) ||
+          (p.body || "").toLowerCase().includes(q) ||
+          (p.author || "").toLowerCase().includes(q)
+        );
+      }
+
+      if(sort === "top"){
+        posts.sort((a,b) => (b.likes||0) - (a.likes||0));
+      } else {
+        posts.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+      }
+
+      if(posts.length === 0){
+        feedEl.innerHTML = `<div class="card"><div class="pad" style="color:var(--muted)">Noch keine Beiträge. Erstelle den ersten Beitrag.</div></div>`;
+        return;
+      }
+
+      feedEl.innerHTML = posts.map(p => `
+        <article class="card" style="margin-bottom:12px">
+          <div class="pad">
+            <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap">
+              <div>
+                <div class="kicker" style="margin-bottom:10px">
+                  <span class="dot" aria-hidden="true"></span> ${TOPIC_LABEL[p.topic] || "Kategorie"}
+                </div>
+                <div style="font-weight:900; font-size:16px">${escapeHtml(p.title)}</div>
+                <div style="color:var(--muted); font-size:13.5px; margin-top:6px; line-height:1.55">
+                  ${escapeHtml(p.body)}
+                </div>
+                <div style="color:var(--muted); font-size:12.5px; margin-top:10px">
+                  Von <strong>${escapeHtml(p.author || "Anonym")}</strong> · ${new Date(p.createdAt).toLocaleString("de-DE")}
+                </div>
+              </div>
+
+              <div style="display:flex; gap:10px; align-items:center">
+                <button class="btn btnSmall" type="button" onclick="likePost('${p.id}')">Like ${p.likes || 0}</button>
+                <button class="btn btnSmall" type="button" onclick="toggleComments('${p.id}')">Kommentare ${p.comments?.length || 0}</button>
+              </div>
+            </div>
+
+            <div id="c_${p.id}" style="display:none; margin-top:12px; border-top:1px solid var(--line); padding-top:12px">
+              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end">
+                <div style="flex:1; min-width:200px">
+                  <label for="n_${p.id}">Name</label>
+                  <input id="n_${p.id}" placeholder="Dein Name" />
+                </div>
+                <div style="flex:2; min-width:240px">
+                  <label for="t_${p.id}">Kommentar</label>
+                  <input id="t_${p.id}" placeholder="Kurz und respektvoll" />
+                </div>
+                <button class="btn btnPrimary btnSmall" type="button" onclick="addComment('${p.id}')">Senden</button>
+              </div>
+
+              <div style="margin-top:10px">
+                ${(p.comments || []).map(c => `
+                  <div style="padding:10px 0; border-bottom:1px solid var(--line)">
+                    <div style="font-weight:800; font-size:13.5px">${escapeHtml(c.author || "Anonym")}</div>
+                    <div style="color:var(--muted); font-size:13.5px; margin-top:4px">${escapeHtml(c.text)}</div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function likePost(id){
+      const posts = loadCommunityPosts();
+      const p = posts.find(x => x.id === id);
+      if(!p) return;
+      p.likes = (p.likes || 0) + 1;
+      saveCommunityPosts(posts);
+      renderFeed();
+    }
+
+    function toggleComments(id){
+      const el = document.getElementById("c_" + id);
+      if(!el) return;
+      el.style.display = (el.style.display === "none" ? "block" : "none");
+    }
+
+    function addComment(id){
+      const name = (document.getElementById("n_" + id).value || "").trim();
+      const text = (document.getElementById("t_" + id).value || "").trim();
+      if(!text) return;
+
+      const posts = loadCommunityPosts();
+      const p = posts.find(x => x.id === id);
+      if(!p) return;
+
+      p.comments = p.comments || [];
+      p.comments.unshift({ author: name || "Anonym", text, createdAt: Date.now() });
+      saveCommunityPosts(posts);
+      renderFeed();
+      toggleComments(id);
+      toggleComments(id);
+    }
+
+    function openModal(){
+      document.getElementById("modalOverlay").style.display = "flex";
+    }
+    function closeModal(){
+      document.getElementById("modalOverlay").style.display = "none";
+    }
+
+    document.getElementById("openPost").addEventListener("click", openModal);
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+    document.getElementById("cancel").addEventListener("click", closeModal);
+
+    document.getElementById("publish").addEventListener("click", () => {
+      const author = (document.getElementById("author").value || "").trim();
+      const topic = document.getElementById("topicNew").value;
+      const title = (document.getElementById("title").value || "").trim();
+      const body = (document.getElementById("body").value || "").trim();
+      if(!title || !body) return;
+
+      const posts = loadCommunityPosts();
+      posts.unshift({
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        author: author || "Anonym",
+        topic,
+        title,
+        body,
+        likes: 0,
+        comments: [],
+        createdAt: Date.now()
+      });
+      saveCommunityPosts(posts);
+
+      document.getElementById("title").value = "";
+      document.getElementById("body").value = "";
+      closeModal();
+      renderFeed();
+    });
+
+    document.getElementById("seed").addEventListener("click", () => {
+      seedCommunityPosts();
+      renderFeed();
+    });
+
+    ["search","topic","sort"].forEach(id => document.getElementById(id).addEventListener("input", renderFeed));
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setCartBadge();
+      renderFeed();
+    });
+  </script>
+</body>
+</html>
