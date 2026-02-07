@@ -21,6 +21,18 @@ function safeJsonParse(str, fallback) {
   }
 }
 
+function slugify(str) {
+  return String(str || "")
+    .toLowerCase()
+    .trim()
+    .replace(/ä/g, "ae")
+    .replace(/ö/g, "oe")
+    .replace(/ü/g, "ue")
+    .replace(/ß/g, "ss")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
 /* ---------- Cart ---------- */
 function loadCart() {
   return safeJsonParse(localStorage.getItem(CART_KEY), []);
@@ -34,41 +46,77 @@ function saveCart(cart) {
 function clearCart() {
   localStorage.removeItem(CART_KEY);
   setCartBadge();
+  // falls auf Produktseite vorhanden
+  renderMiniCart();
 }
 
+/**
+ * addToCart kann:
+ * - addToCart("an:care Stick Calm")
+ * - addToCart({ id, name, note, price, qty })
+ */
 function addToCart(itemOrName) {
-  // Unterstützt alten Aufruf addToCart("an:care Calm") und neuen addToCart({ ... })
   const cart = loadCart();
 
-  let item = null;
-  if (typeof itemOrName === "string") {
-    // Fallback Artikel
-    item = {
-      id: "ancare_unknown",
-      name: itemOrName,
-      note: "",
-      price: 0,
-      qty: 1,
-    };
-  } else {
-    item = itemOrName;
-  }
+  // Schutz vor undefined / null
+  const isString = typeof itemOrName === "string";
+  const isObject = itemOrName && typeof itemOrName === "object";
 
-  // Sicherheits Defaults
-  item.id = item.id || "ancare_unknown";
-  item.name = item.name || "an:care";
-  item.note = item.note || "";
-  item.price = typeof item.price === "number" ? item.price : parseFloat(item.price || "0");
-  item.qty = Math.max(1, parseInt(item.qty || "1", 10));
+  let item;
+
+  if (isString) {
+    // String-Fallback: sinnvoller Default statt price:0
+    const name = itemOrName.trim();
+    item = {
+      id: "ancare_" + slugify(name || "item"),
+      name: name || "an:care",
+      note: "",
+      price: 13.99,
+      qty: 1
+    };
+
+    // Wenn Calm irgendwo im Namen vorkommt, setzen wir die definierte ID
+    if (name.toLowerCase().includes("calm")) {
+      item.id = "ancare_stick_calm";
+      item.name = "an:care Stick Calm";
+      item.note = "Lavendel Bergamotte Vetiver";
+      item.price = 13.99;
+    }
+  } else if (isObject) {
+    // Objekt: Defaults + Validierung
+    const name = (itemOrName.name || "an:care").trim();
+    item = {
+      id: itemOrName.id || ("ancare_" + slugify(name || "item")),
+      name,
+      note: (itemOrName.note || "").trim(),
+      price: typeof itemOrName.price === "number"
+        ? itemOrName.price
+        : parseFloat(itemOrName.price || "0"),
+      qty: Math.max(1, parseInt(itemOrName.qty || "1", 10))
+    };
+
+    // Preis nicht valide oder 0 -> Default, damit es nicht "kaputt" wirkt
+    if (!Number.isFinite(item.price) || item.price <= 0) item.price = 13.99;
+  } else {
+    // Unbekannter Aufruf: nicht crashen, einfach abbrechen
+    console.warn("[an:care] addToCart: ungültiger Parameter", itemOrName);
+    return;
+  }
 
   const existing = cart.find((x) => x.id === item.id);
   if (existing) {
-    existing.qty += item.qty;
+    existing.qty = (parseInt(existing.qty || 0, 10) || 0) + item.qty;
   } else {
     cart.push({ ...item });
   }
 
   saveCart(cart);
+
+  // UI Updates
+  setCartBadge();
+  renderMiniCart();
+
+  console.log("[an:care] addToCart OK:", item);
 }
 
 function cartCount() {
@@ -122,7 +170,6 @@ function renderMiniCart() {
 
   host.innerHTML = rows;
 
-  // Remove handlers
   host.querySelectorAll("[data-remove-index]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const i = parseInt(btn.getAttribute("data-remove-index"), 10);
@@ -149,7 +196,6 @@ function saveInterest(data) {
 }
 
 function trackInterest(payload) {
-  // payload: { variant, name, source, note }
   const data = loadInterest();
 
   const event = {
@@ -246,7 +292,6 @@ function renderInterestPanel() {
 
 /* ---------- Auto wiring for Shop buttons ---------- */
 function wireInterestButtons() {
-  // Buttons müssen data-interest tragen
   const buttons = document.querySelectorAll("[data-interest]");
   if (!buttons.length) return;
 
@@ -259,15 +304,11 @@ function wireInterestButtons() {
 
       const data = trackInterest({ variant, name, source, note });
 
-      // UX Feedback
       btn.textContent = "Interesse gespeichert";
       btn.disabled = true;
 
-      // Panel aktualisieren falls vorhanden
       renderInterestPanel();
-
-      // Optional kurzer Hinweis
-      console.log("Nachfrage gespeichert:", variant, data.totals);
+      console.log("[an:care] Nachfrage gespeichert:", variant, data.totals);
     });
   });
 }
@@ -275,8 +316,10 @@ function wireInterestButtons() {
 /* ---------- Init ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   setCartBadge();
-  if (typeof renderMiniCart === "function") renderMiniCart();
+  renderMiniCart(); // macht nichts, wenn miniCart nicht existiert
   wireInterestButtons();
   renderInterestPanel();
+});
+
 });
 
