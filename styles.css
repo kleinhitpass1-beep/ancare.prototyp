@@ -350,4 +350,45 @@ select, input{
     grid-template-columns:1fr;
   }
 }
+.hero{
+  position:relative;
+  overflow:hidden;
+}
+
+.heroVideo{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+.heroVideo video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:saturate(0.9) contrast(0.95);
+  transform:scale(1.02);
+}
+
+.heroOverlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+}
+
+/* Stellt sicher, dass der Inhalt über dem Video liegt */
+.hero .container,
+.hero .heroGrid{
+  position:relative;
+  z-index:1;
+}
+
+/* Mobile Performance: Video aus, statischer Hintergrund */
+@media (max-width: 900px){
+  .heroVideo{ display:none; }
+  .hero{
+    background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(243,248,255,0.92));
+  }
+}
+
 
