@@ -459,5 +459,19 @@ select, input{
     justify-content: center;
   }
 }
+.waveEmbed{
+  margin-top: 24px;
+  display:flex;
+  justify-content:center;
+}
+
+.waveEmbed iframe{
+  width:100%;
+  max-width:480px;
+  height:420px;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 20px 40px rgba(11,95,255,.12);
+}
 
 
