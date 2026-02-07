@@ -584,6 +584,82 @@ select, input{
 
 /* keeps bottom meta aligned */
 .influencerBottom{margin-top:auto;}
+/* Newsletter Pop up */
+.nlOverlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background: rgba(11,27,58,.45);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+}
+
+.nlOverlay.isOpen{ display:flex; }
+
+.nlModal{
+  width: min(560px, 100%);
+  border-radius: 26px;
+  background: rgba(255,255,255,.92);
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 90px rgba(11,27,58,.22);
+  padding: 22px 22px 18px;
+  position:relative;
+}
+
+.nlClose{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:40px;
+  height:40px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.85);
+  color: var(--text);
+  font-size: 24px;
+  line-height: 1;
+  cursor:pointer;
+  box-shadow: 0 10px 22px rgba(11,27,58,.10);
+}
+
+.nlTitle{
+  margin: 10px 0 6px;
+  font-size: 26px;
+  letter-spacing: -.3px;
+}
+
+.nlSub{
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.55;
+  max-width: 60ch;
+}
+
+.nlForm{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:10px;
+  margin-top: 10px;
+}
+
+.nlForm .btn{
+  justify-content:center;
+}
+
+.nlForm input{
+  height: 46px;
+}
+
+.nlFine{
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
 
 
 
