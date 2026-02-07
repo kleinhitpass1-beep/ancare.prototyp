@@ -565,5 +565,20 @@ select, input{
     height:300px;
   }
 }
+.packShot{
+  margin-top:14px;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.55);
+  box-shadow: var(--shadow2);
+}
+
+.packShot img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:cover;
+}
 
 
