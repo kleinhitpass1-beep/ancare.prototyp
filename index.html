@@ -234,51 +234,49 @@
         alert("Im Prototyp hinzugefügt. Öffne jetzt die Produktseite für Details.");
       });
     }
-      // Newsletter Pop up (einmalig)
-  (function(){
-    const KEY = "ancare_newsletter_seen_v1";
-    const overlay = document.getElementById("nlOverlay");
-    const closeBtn = document.getElementById("nlClose");
-    const laterBtn = document.getElementById("nlLater");
-    const form = document.getElementById("nlForm");
+    // Newsletter Pop up (bei jedem Besuch)
+(function(){
+  const overlay = document.getElementById("nlOverlay");
+  const closeBtn = document.getElementById("nlClose");
+  const laterBtn = document.getElementById("nlLater");
+  const form = document.getElementById("nlForm");
 
-    if(!overlay || localStorage.getItem(KEY)) return;
+  if(!overlay) return;
 
-    function open(){
-      overlay.classList.add("isOpen");
-      overlay.setAttribute("aria-hidden","false");
-      const email = document.getElementById("nlEmail");
-      if(email) setTimeout(() => email.focus(), 150);
-    }
-    function close(){
-      overlay.classList.remove("isOpen");
-      overlay.setAttribute("aria-hidden","true");
-      localStorage.setItem(KEY, "1");
-    }
+  function open(){
+    overlay.classList.add("isOpen");
+    overlay.setAttribute("aria-hidden","false");
+    const email = document.getElementById("nlEmail");
+    if(email) setTimeout(() => email.focus(), 150);
+  }
+  function close(){
+    overlay.classList.remove("isOpen");
+    overlay.setAttribute("aria-hidden","true");
+  }
 
-    // leicht verzögert öffnen (wirkt hochwertiger)
-    setTimeout(open, 1200);
+  // leicht verzögert öffnen
+  setTimeout(open, 1200);
 
-    closeBtn.addEventListener("click", close);
-    laterBtn.addEventListener("click", close);
+  closeBtn.addEventListener("click", close);
+  laterBtn.addEventListener("click", close);
 
-    // Klick auf Hintergrund schließt
-    overlay.addEventListener("click", (e) => {
-      if(e.target === overlay) close();
-    });
+  // Klick auf Hintergrund schließt
+  overlay.addEventListener("click", (e) => {
+    if(e.target === overlay) close();
+  });
 
-    // ESC schließt
-    document.addEventListener("keydown", (e) => {
-      if(e.key === "Escape" && overlay.classList.contains("isOpen")) close();
-    });
+  // ESC schließt
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && overlay.classList.contains("isOpen")) close();
+  });
 
-    // Submit: im Prototyp nur bestätigen und schließen
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      close();
-      alert("Danke. Du bist im Prototyp eingetragen.");
-    });
-  })();
+  // Submit: im Prototyp nur bestätigen und schließen
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    close();
+    alert("Danke. Du bist im Prototyp eingetragen.");
+  });
+})();
   </script>
 </body>
 </html>
