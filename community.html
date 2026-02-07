@@ -3,8 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ankerstick Community | Prototype</title>
-  <meta name="description" content="Community Prototype für Ankerstick. Feed, Kategorien, Beiträge und Kommentare im Browser gespeichert." />
+  <title>an:care Community</title>
+  <meta name="description" content="Community Bereich mit Kalender und Meetings. Prototyp, lokal im Browser gespeichert." />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -13,19 +15,21 @@
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Start">
-          <span class="mark" aria-hidden="true"></span>
+          <img class="logo" src="logo.png" alt="an:care Logo" />
           <span>
-            Ankerstick
+            an:care
             <small>Community</small>
           </span>
         </a>
 
         <nav class="links" aria-label="Navigation">
-          <a class="link" href="index.html">Shop</a>
-          <a class="link" href="product.html">Produkt</a>
+          <a class="link" href="shop.html">Shop</a>
+          <a class="link" href="community.html">Community</a>
+          <a class="link" href="marketing.html">Marketing</a>
           <a class="link" href="podcast.html">Podcast</a>
-          <a class="btn btnPrimary" href="community.html">
-            Community <span class="badge" id="cartCount">0</span>
+          <a class="link" href="blog.html">Blog</a>
+          <a class="btn btnPrimary" href="product.html">
+            Zum Produkt <span class="badge" id="cartCount">0</span>
           </a>
         </nav>
       </div>
@@ -35,64 +39,108 @@
   <main>
     <section class="section">
       <div class="container">
+
         <div class="card shadowBig">
           <div class="padLg">
-            <div class="kicker"><span class="dot" aria-hidden="true"></span> Prototype, Inhalte werden nur lokal gespeichert</div>
-            <h1 style="margin-bottom:10px">Community</h1>
-            <p class="lead" style="margin-bottom:0">
-              Ein ruhiger Ort für Austausch, Routinen, Erfahrungen und kleine Schritte zurück in den Moment.
-              Kein Ersatz für medizinische oder psychotherapeutische Behandlung.
+            <div class="kicker"><span class="dot" aria-hidden="true"></span> Community</div>
+            <h1 style="margin:10px 0">Kalender und Meetings</h1>
+            <p class="lead" style="margin:0">
+              Prototyp: Plane Community Sessions, kleine Rituale und Austausch. Alles wird lokal im Browser gespeichert.
             </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="community">
-      <div class="container">
-        <div class="sectionHeader">
-          <div>
-            <h2>Feed</h2>
-            <p>Du kannst Beiträge erstellen, filtern und kommentieren. Alles bleibt im Browser, ohne Login.</p>
-          </div>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end">
-            <button class="btn" type="button" id="openPost">Beitrag erstellen</button>
-            <button class="btn btnPrimary" type="button" id="seed">Beispiele laden</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="pad" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end">
-            <div style="flex:1; min-width:220px">
-              <label for="search">Suche</label>
-              <input id="search" placeholder="Zum Beispiel: Abendroutine, Atmung, Reset" />
-            </div>
-
-            <div style="min-width:220px">
-              <label for="topic">Kategorie</label>
-              <select id="topic">
-                <option value="all" selected>Alle</option>
-                <option value="rituale">Rituale</option>
-                <option value="alltag">Alltag und Stress</option>
-                <option value="fokus">Fokus</option>
-                <option value="schlaf">Schlaf</option>
-                <option value="fragen">Fragen</option>
-              </select>
-            </div>
-
-            <div style="min-width:180px">
-              <label for="sort">Sortierung</label>
-              <select id="sort">
-                <option value="new" selected>Neueste</option>
-                <option value="top">Meiste Likes</option>
-              </select>
+            <div class="ctaRow" style="margin-top:14px">
+              <button class="btn btnPrimary" type="button" id="loadExamples">Beispiele laden</button>
+              <button class="btn" type="button" id="clearMeetings">Alle löschen</button>
             </div>
           </div>
         </div>
 
-        <div style="height:12px"></div>
+        <div style="height:18px"></div>
 
-        <div id="feed"></div>
+        <div class="grid2">
+          <!-- Kalender -->
+          <div class="card shadowBig">
+            <div class="mediaTop">
+              <div>
+                <strong>Kalender</strong><br />
+                <span id="monthLabel">Monat</span>
+              </div>
+              <div class="ctaRow" style="margin:0">
+                <button class="btn btnSmall" type="button" id="prevMonth">Zurück</button>
+                <button class="btn btnSmall" type="button" id="nextMonth">Weiter</button>
+              </div>
+            </div>
+
+            <div class="pad">
+              <div class="calendarGrid" aria-label="Kalender">
+                <div class="calHead">Mo</div><div class="calHead">Di</div><div class="calHead">Mi</div><div class="calHead">Do</div><div class="calHead">Fr</div><div class="calHead">Sa</div><div class="calHead">So</div>
+                <div id="calendarCells" class="calCells"></div>
+              </div>
+
+              <div class="fineprint">
+                Tipp: Klicke einen Tag an, um das Formular automatisch zu füllen.
+              </div>
+            </div>
+          </div>
+
+          <!-- Meetings -->
+          <div class="card shadowBig">
+            <div class="mediaTop">
+              <div>
+                <strong>Meetings</strong><br />
+                <span>Demnächst geplante Sessions</span>
+              </div>
+              <span class="kicker" style="margin:0">Prototyp</span>
+            </div>
+
+            <div class="pad">
+              <div id="meetingsList"></div>
+              <div style="height:14px"></div>
+
+              <div class="card" style="background:rgba(255,255,255,.7)">
+                <div class="pad">
+                  <div style="font-weight:900; font-size:16px">Meeting hinzufügen</div>
+
+                  <div class="field">
+                    <label for="mTitle">Titel</label>
+                    <input id="mTitle" type="text" placeholder="Zum Beispiel: 10 Minuten Reset Session" />
+                  </div>
+
+                  <div class="field">
+                    <label for="mDate">Datum</label>
+                    <input id="mDate" type="date" />
+                  </div>
+
+                  <div class="field" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px">
+                    <div>
+                      <label for="mTime">Uhrzeit</label>
+                      <input id="mTime" type="time" />
+                    </div>
+                    <div>
+                      <label for="mDuration">Dauer Minuten</label>
+                      <input id="mDuration" type="number" min="5" value="30" />
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <label for="mPlace">Ort oder Link</label>
+                    <input id="mPlace" type="text" placeholder="Zoom Link oder Ort" />
+                  </div>
+
+                  <div class="ctaRow" style="margin-top:14px">
+                    <button class="btn btnPrimary" type="button" id="addMeeting">Meeting speichern</button>
+                    <button class="btn" type="button" id="resetForm">Zurücksetzen</button>
+                  </div>
+
+                  <div class="fineprint" style="margin-top:12px">
+                    Hinweis: Das ist ein Prototyp. In der echten Version kann das an Google Calendar oder Calendly angebunden werden.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -100,239 +148,214 @@
       <div class="container">
         <div class="foot">
           <div>
-            <strong style="color:var(--text)">Ankerstick Community</strong><br />
-            <span>Prototype ohne Backend, nur für User Flow Tests</span>
+            <strong style="color:var(--text)">an:care Community</strong><br />
+            <span>Kalender und Meetings im Prototyp</span>
           </div>
           <div>
-            <a class="link" href="index.html">Zurück zum Shop</a>
+            <a class="link" href="index.html">Zur Startseite</a>
           </div>
         </div>
       </div>
     </footer>
   </main>
 
-  <!-- Modal -->
-  <div id="modalOverlay" style="display:none; position:fixed; inset:0; background:rgba(11,27,58,.42); z-index:200; padding:18px; align-items:center; justify-content:center;">
-    <div class="card shadowBig" style="width:min(820px, 96vw);">
-      <div class="padLg" style="border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:10px; align-items:center;">
-        <strong>Neuer Beitrag</strong>
-        <button class="btn btnSmall" type="button" id="closeModal">Schließen</button>
-      </div>
-      <div class="padLg">
-        <div class="infoGrid" style="grid-template-columns: 1fr 1fr;">
-          <div>
-            <label for="author">Name</label>
-            <input id="author" placeholder="Zum Beispiel: Maurice" />
-          </div>
-          <div>
-            <label for="topicNew">Kategorie</label>
-            <select id="topicNew">
-              <option value="rituale">Rituale</option>
-              <option value="alltag">Alltag und Stress</option>
-              <option value="fokus">Fokus</option>
-              <option value="schlaf">Schlaf</option>
-              <option value="fragen">Fragen</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="title">Titel</label>
-          <input id="title" placeholder="Was möchtest du teilen oder fragen" />
-        </div>
-
-        <div class="field">
-          <label for="body">Text</label>
-          <input id="body" placeholder="Kurz und klar. Was hat dir geholfen oder was brauchst du" />
-        </div>
-
-        <div class="ctaRow" style="margin-top:14px; justify-content:flex-end">
-          <button class="btn" type="button" id="cancel">Abbrechen</button>
-          <button class="btn btnPrimary" type="button" id="publish">Veröffentlichen</button>
-        </div>
-
-        <div class="fineprint">
-          Hinweis: Community Inhalte sind kein Ersatz für professionelle Hilfe. Bei akuten Krisen oder starker Belastung wende dich bitte an geeignete Stellen.
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="app.js"></script>
   <script>
-    const TOPIC_LABEL = {
-      rituale: "Rituale",
-      alltag: "Alltag und Stress",
-      fokus: "Fokus",
-      schlaf: "Schlaf",
-      fragen: "Fragen"
-    };
+    // Badge aus app.js
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof setCartBadge === "function") setCartBadge();
+    });
 
-    function escapeHtml(s){
-      return String(s || "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    /* =========================
+       Community Kalender Logik
+    ========================= */
+    const MEETINGS_KEY = "ancare_meetings_v1";
+
+    function loadMeetings() {
+      try { return JSON.parse(localStorage.getItem(MEETINGS_KEY) || "[]"); }
+      catch { return []; }
+    }
+    function saveMeetings(list) {
+      localStorage.setItem(MEETINGS_KEY, JSON.stringify(list));
     }
 
-    function renderFeed(){
-      const feedEl = document.getElementById("feed");
-      const q = (document.getElementById("search").value || "").toLowerCase().trim();
-      const topic = document.getElementById("topic").value;
-      const sort = document.getElementById("sort").value;
+    function pad2(n){ return String(n).padStart(2, "0"); }
+    function toISODate(d){
+      return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate());
+    }
 
-      let posts = loadCommunityPosts();
+    let viewDate = new Date(); // current month
 
-      if(topic !== "all"){
-        posts = posts.filter(p => p.topic === topic);
+    function renderMonth() {
+      const year = viewDate.getFullYear();
+      const month = viewDate.getMonth();
+
+      const label = new Intl.DateTimeFormat("de-DE", { month: "long", year: "numeric" }).format(new Date(year, month, 1));
+      document.getElementById("monthLabel").textContent = label;
+
+      const cellsHost = document.getElementById("calendarCells");
+      cellsHost.innerHTML = "";
+
+      const first = new Date(year, month, 1);
+      // Monday-first index: (Sun=0) -> (Mon=0)
+      const weekday = (first.getDay() + 6) % 7;
+
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // previous month trailing days
+      for (let i = 0; i < weekday; i++) {
+        const empty = document.createElement("button");
+        empty.className = "calCell calMuted";
+        empty.type = "button";
+        empty.disabled = true;
+        empty.textContent = "";
+        cellsHost.appendChild(empty);
       }
-      if(q){
-        posts = posts.filter(p =>
-          (p.title || "").toLowerCase().includes(q) ||
-          (p.body || "").toLowerCase().includes(q) ||
-          (p.author || "").toLowerCase().includes(q)
-        );
-      }
 
-      if(sort === "top"){
-        posts.sort((a,b) => (b.likes||0) - (a.likes||0));
-      } else {
-        posts.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
-      }
+      const meetings = loadMeetings();
+      const todayISO = toISODate(new Date());
 
-      if(posts.length === 0){
-        feedEl.innerHTML = `<div class="card"><div class="pad" style="color:var(--muted)">Noch keine Beiträge. Erstelle den ersten Beitrag.</div></div>`;
+      for (let day = 1; day <= daysInMonth; day++) {
+        const d = new Date(year, month, day);
+        const iso = toISODate(d);
+
+        const count = meetings.filter(m => m.date === iso).length;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "calCell";
+        if (iso === todayISO) btn.classList.add("calToday");
+        if (count > 0) btn.classList.add("calHas");
+
+        btn.innerHTML = `
+          <div class="calNum">${day}</div>
+          ${count > 0 ? `<div class="calBadge">${count}</div>` : ``}
+        `;
+
+        btn.addEventListener("click", () => {
+          // Formular Datum füllen + sanft scrollen
+          document.getElementById("mDate").value = iso;
+          document.getElementById("mTitle").focus();
+        });
+
+        cellsHost.appendChild(btn);
+      }
+    }
+
+    function renderMeetings() {
+      const host = document.getElementById("meetingsList");
+      const list = loadMeetings();
+
+      // Sort by date/time
+      list.sort((a,b) => (a.date + (a.time||"")) .localeCompare(b.date + (b.time||"")));
+
+      if (list.length === 0) {
+        host.innerHTML = `<div class="sub">Noch keine Meetings geplant.</div>`;
         return;
       }
 
-      feedEl.innerHTML = posts.map(p => `
-        <article class="card" style="margin-bottom:12px">
-          <div class="pad">
-            <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap">
-              <div>
-                <div class="kicker" style="margin-bottom:10px">
-                  <span class="dot" aria-hidden="true"></span> ${TOPIC_LABEL[p.topic] || "Kategorie"}
-                </div>
-                <div style="font-weight:900; font-size:16px">${escapeHtml(p.title)}</div>
-                <div style="color:var(--muted); font-size:13.5px; margin-top:6px; line-height:1.55">
-                  ${escapeHtml(p.body)}
-                </div>
-                <div style="color:var(--muted); font-size:12.5px; margin-top:10px">
-                  Von <strong>${escapeHtml(p.author || "Anonym")}</strong> · ${new Date(p.createdAt).toLocaleString("de-DE")}
-                </div>
+      host.innerHTML = list.map((m, idx) => {
+        const when = `${m.date}${m.time ? " · " + m.time : ""}`;
+        const dur = m.duration ? ` · ${m.duration} min` : "";
+        const place = m.place ? `<div class="sub" style="margin-top:6px">${m.place}</div>` : "";
+        return `
+          <div class="meetingItem">
+            <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start">
+              <div style="min-width:0">
+                <div style="font-weight:900">${m.title || "Meeting"}</div>
+                <div class="sub" style="margin-top:4px">${when}${dur}</div>
+                ${place}
               </div>
-
-              <div style="display:flex; gap:10px; align-items:center">
-                <button class="btn btnSmall" type="button" onclick="likePost('${p.id}')">Like ${p.likes || 0}</button>
-                <button class="btn btnSmall" type="button" onclick="toggleComments('${p.id}')">Kommentare ${p.comments?.length || 0}</button>
-              </div>
+              <button class="btn btnSmall" type="button" data-del="${idx}">Löschen</button>
             </div>
-
-            <div id="c_${p.id}" style="display:none; margin-top:12px; border-top:1px solid var(--line); padding-top:12px">
-              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end">
-                <div style="flex:1; min-width:200px">
-                  <label for="n_${p.id}">Name</label>
-                  <input id="n_${p.id}" placeholder="Dein Name" />
-                </div>
-                <div style="flex:2; min-width:240px">
-                  <label for="t_${p.id}">Kommentar</label>
-                  <input id="t_${p.id}" placeholder="Kurz und respektvoll" />
-                </div>
-                <button class="btn btnPrimary btnSmall" type="button" onclick="addComment('${p.id}')">Senden</button>
-              </div>
-
-              <div style="margin-top:10px">
-                ${(p.comments || []).map(c => `
-                  <div style="padding:10px 0; border-bottom:1px solid var(--line)">
-                    <div style="font-weight:800; font-size:13.5px">${escapeHtml(c.author || "Anonym")}</div>
-                    <div style="color:var(--muted); font-size:13.5px; margin-top:4px">${escapeHtml(c.text)}</div>
-                  </div>
-                `).join("")}
-              </div>
-            </div>
-
           </div>
-        </article>
-      `).join("");
-    }
+        `;
+      }).join("");
 
-    function likePost(id){
-      const posts = loadCommunityPosts();
-      const p = posts.find(x => x.id === id);
-      if(!p) return;
-      p.likes = (p.likes || 0) + 1;
-      saveCommunityPosts(posts);
-      renderFeed();
-    }
-
-    function toggleComments(id){
-      const el = document.getElementById("c_" + id);
-      if(!el) return;
-      el.style.display = (el.style.display === "none" ? "block" : "none");
-    }
-
-    function addComment(id){
-      const name = (document.getElementById("n_" + id).value || "").trim();
-      const text = (document.getElementById("t_" + id).value || "").trim();
-      if(!text) return;
-
-      const posts = loadCommunityPosts();
-      const p = posts.find(x => x.id === id);
-      if(!p) return;
-
-      p.comments = p.comments || [];
-      p.comments.unshift({ author: name || "Anonym", text, createdAt: Date.now() });
-      saveCommunityPosts(posts);
-      renderFeed();
-      toggleComments(id);
-      toggleComments(id);
-    }
-
-    function openModal(){
-      document.getElementById("modalOverlay").style.display = "flex";
-    }
-    function closeModal(){
-      document.getElementById("modalOverlay").style.display = "none";
-    }
-
-    document.getElementById("openPost").addEventListener("click", openModal);
-    document.getElementById("closeModal").addEventListener("click", closeModal);
-    document.getElementById("cancel").addEventListener("click", closeModal);
-
-    document.getElementById("publish").addEventListener("click", () => {
-      const author = (document.getElementById("author").value || "").trim();
-      const topic = document.getElementById("topicNew").value;
-      const title = (document.getElementById("title").value || "").trim();
-      const body = (document.getElementById("body").value || "").trim();
-      if(!title || !body) return;
-
-      const posts = loadCommunityPosts();
-      posts.unshift({
-        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-        author: author || "Anonym",
-        topic,
-        title,
-        body,
-        likes: 0,
-        comments: [],
-        createdAt: Date.now()
+      host.querySelectorAll("[data-del]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = parseInt(btn.getAttribute("data-del"), 10);
+          const next = loadMeetings();
+          next.splice(i, 1);
+          saveMeetings(next);
+          renderMeetings();
+          renderMonth();
+        });
       });
-      saveCommunityPosts(posts);
+    }
 
-      document.getElementById("title").value = "";
-      document.getElementById("body").value = "";
-      closeModal();
-      renderFeed();
+    function resetForm() {
+      document.getElementById("mTitle").value = "";
+      document.getElementById("mDate").value = "";
+      document.getElementById("mTime").value = "";
+      document.getElementById("mDuration").value = "30";
+      document.getElementById("mPlace").value = "";
+    }
+
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1);
+      renderMonth();
+    });
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
+      renderMonth();
     });
 
-    document.getElementById("seed").addEventListener("click", () => {
-      seedCommunityPosts();
-      renderFeed();
+    document.getElementById("addMeeting").addEventListener("click", () => {
+      const title = (document.getElementById("mTitle").value || "").trim();
+      const date = document.getElementById("mDate").value;
+      const time = document.getElementById("mTime").value;
+      const duration = parseInt(document.getElementById("mDuration").value || "30", 10);
+      const place = (document.getElementById("mPlace").value || "").trim();
+
+      if (!date) { alert("Bitte Datum wählen."); return; }
+      if (!title) { alert("Bitte Titel eingeben."); return; }
+
+      const list = loadMeetings();
+      list.push({
+        id: "m_" + Date.now(),
+        title,
+        date,
+        time,
+        duration: Math.max(5, isNaN(duration) ? 30 : duration),
+        place
+      });
+      saveMeetings(list);
+
+      renderMeetings();
+      renderMonth();
+      resetForm();
+      alert("Meeting gespeichert (Prototyp).");
     });
 
-    ["search","topic","sort"].forEach(id => document.getElementById(id).addEventListener("input", renderFeed));
+    document.getElementById("resetForm").addEventListener("click", resetForm);
 
-    document.addEventListener("DOMContentLoaded", () => {
-      setCartBadge();
-      renderFeed();
+    document.getElementById("clearMeetings").addEventListener("click", () => {
+      localStorage.removeItem(MEETINGS_KEY);
+      renderMeetings();
+      renderMonth();
+      alert("Alle Meetings gelöscht (Prototyp).");
     });
+
+    document.getElementById("loadExamples").addEventListener("click", () => {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = now.getMonth();
+      const examples = [
+        { id:"m1", title:"Community Reset Session", date: toISODate(new Date(y,m, Math.min(28, now.getDate()+2))), time:"19:00", duration:30, place:"Online · Zoom Link" },
+        { id:"m2", title:"Austausch Runde: Stress reduzieren", date: toISODate(new Date(y,m, Math.min(28, now.getDate()+5))), time:"18:30", duration:45, place:"Online · Zoom Link" },
+        { id:"m3", title:"Mini Ritual Workshop", date: toISODate(new Date(y,m, Math.min(28, now.getDate()+9))), time:"20:00", duration:40, place:"Online · Zoom Link" },
+      ];
+      saveMeetings(examples);
+      renderMeetings();
+      renderMonth();
+      alert("Beispiele geladen.");
+    });
+
+    // initial
+    renderMonth();
+    renderMeetings();
   </script>
 </body>
 </html>
+
