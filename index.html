@@ -4,9 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>an:care | Shop Prototyp</title>
+
   <link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
-  <meta name="description" content="Shop Prototyp für an:care. Ein Duftritual für mehr Ruhe im Alltag." />
+  <link rel="apple-touch-icon" href="favicon.png">
+
+  <meta name="description" content="Shop Prototyp für an:care. Ein Duftstick für mehr Ruhe im Alltag." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -15,13 +17,12 @@
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Start">
-  <img class="logo" src="logo.png" alt="an:care Logo" />
-  <span>
-    an:care
-    <small>Shop Prototyp</small>
-  </span>
-</a>
-
+          <img class="logo" src="logo.png" alt="an:care Logo" />
+          <span>
+            an:care
+            <small>Shop Prototyp</small>
+          </span>
+        </a>
 
         <nav class="links" aria-label="Navigation">
           <a class="link" href="shop.html">Shop</a>
@@ -41,136 +42,144 @@
   <main id="top">
     <section class="hero">
       <div class="heroVideo" aria-hidden="true">
-  <video autoplay muted loop playsinline preload="metadata">
-    <source src="hero-bg-v2.mp4" type="video/mp4" />
-  </video>
-  <div class="heroOverlay"></div>
-</div>
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="hero-bg-v2.mp4" type="video/mp4" />
+        </video>
+        <div class="heroOverlay"></div>
+      </div>
+
       <div class="container">
         <div class="heroGrid">
+          <!-- LEFT -->
           <div class="card shadowBig">
             <div class="padLg">
-           <div class="kicker"><span class="dot" aria-hidden="true"></span> an:care</div>
+              <div class="kicker"><span class="dot" aria-hidden="true"></span> an:care</div>
 
-<h1 class="heroTitle">Dein an:care in stürmischen Zeiten</h1>
+              <!-- underline animation: add span around "an:care" -->
+              <h1 class="heroTitle">
+                Dein <span class="underlineOnLoad">an:care</span> in stürmischen Zeiten
+              </h1>
 
-<p class="heroSub">
-  Ein Duftstick für Momente, in denen du wieder bei dir ankommen willst.
-</p>
+              <p class="heroSub">
+                Ein Duftstick für Momente, in denen du wieder bei dir ankommen willst.
+              </p>
 
-<div class="chipRow" aria-label="Vorteile">
-  <span class="chip">Natürlich & nachhaltig</span>
-  <span class="chip">Wirkt unmittelbar</span>
-  <span class="chip">Für Zuhause & unterwegs</span>
-</div>
-<div class="waveImage">
-  <img src="welle.jpg" alt="Sanfte Meereswelle als Symbol für Ruhe">
-</div>
+              <div class="chipRow" aria-label="Vorteile">
+                <span class="chip">Natürlich & nachhaltig</span>
+                <span class="chip">Wirkt unmittelbar</span>
+                <span class="chip">Für Zuhause & unterwegs</span>
+              </div>
+
+              <div class="waveImage">
+                <img src="welle.jpg" alt="Sanfte Meereswelle als Symbol für Ruhe">
+              </div>
             </div>
           </div>
 
+          <!-- RIGHT -->
           <aside class="card shadowBig" aria-label="Bilder">
             <div class="mediaTop">
               <div>
                 <strong>Produkt Eindruck</strong><br />
-                <span>Blau Weiß Look, klare Typografie</span>
+                <span>Nachhaltiger Holzoptik Look</span>
               </div>
-              <span class="kicker" style="margin:0">Anker Edition</span>
+              <span class="kicker" style="margin:0">an:care Edition</span>
             </div>
- <div class="mediaGrid">
-  <!-- Bild 1: Produkt -->
-  <a href="product.html" class="productLink" aria-label="Zum Produkt an:care">
-    <img class="img heroProduct" src="anker8-v2.jpg" alt="an:care Duftstick in Holzoptik" />
-  </a>
 
-  <!-- Bild 2: Verpackung -->
-  <div class="packShot" aria-label="an:care Verpackung">
-    <img src="verpackung.jpg" alt="an:care Verpackung" loading="lazy" />
-  </div>
-</div>
+            <div class="mediaGrid">
+              <!-- Bild 1: Produkt -->
+              <a href="product.html" class="productLink" aria-label="Zum Produkt an:care">
+                <img class="img heroProduct" src="anker8-v2.jpg" alt="an:care Duftstick in Holzoptik" />
+              </a>
 
-              <div class="ctaRow ctaRight">
-  <a class="btn btnPrimary" href="product.html">Jetzt an:care bestellen</a>
-  <a class="btn" href="shop.html">Zum Shop</a>
-</div>
+              <!-- Bild 2: Verpackung -->
+              <div class="packShot" aria-label="an:care Verpackung">
+                <img src="verpackung.jpg" alt="an:care Verpackung" loading="lazy" />
+              </div>
+            </div>
+
+            <!-- CTA: use clean placement class from new CSS -->
+            <div class="rightCta">
+              <a class="btn btnPrimary" href="product.html">Jetzt an:care bestellen</a>
+              <a class="btn" href="shop.html">Zum Shop</a>
             </div>
           </aside>
         </div>
       </div>
     </section>
-  <div class="container">
-    <div class="sectionHeader">
-      <div>
-        <h2>So funktioniert an:care</h2>
-        <p>Ein kleines Ritual, das du in deinen Alltag integrierst.</p>
-      </div>
-    </div>
 
-    <div class="grid3">
-      <div class="card">
-        <div class="pad">
-          <div class="kicker"><span class="dot" aria-hidden="true"></span> Schritt 1</div>
-          <div style="font-weight:900; font-size:16px; margin-top:10px">Kurz riechen</div>
-          <div class="sub">Ein Moment, um aus dem Kopf in den Körper zu kommen.</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="pad">
-          <div class="kicker"><span class="dot" aria-hidden="true"></span> Schritt 2</div>
-          <div style="font-weight:900; font-size:16px; margin-top:10px">4 bis 6 Atemzüge</div>
-          <div class="sub">Ruhig ausatmen. Das ist der Reset.</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="pad">
-          <div class="kicker"><span class="dot" aria-hidden="true"></span> Schritt 3</div>
-          <div style="font-weight:900; font-size:16px; margin-top:10px">Ein klarer nächster Schritt</div>
-          <div class="sub">Nicht perfekt. Nur klar. Weitergehen.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="erklaervideo">
-  <div class="container">
-    <div class="card shadowBig">
-      <div class="padLg">
-        <div class="kicker">
-          <span class="dot" aria-hidden="true"></span>
-          Erklärvideo
+    <section class="section">
+      <div class="container">
+        <div class="sectionHeader">
+          <div>
+            <h2>So funktioniert an:care</h2>
+            <p>Ein kleines Ritual, das du in deinen Alltag integrierst.</p>
+          </div>
         </div>
 
-        <h2 style="margin:12px 0 8px">
-        </h2>
+        <div class="grid3">
+          <div class="card">
+            <div class="pad">
+              <div class="kicker"><span class="dot" aria-hidden="true"></span> Schritt 1</div>
+              <div style="font-weight:900; font-size:16px; margin-top:10px">Kurz riechen</div>
+              <div class="sub">Ein Moment, um aus dem Kopf in den Körper zu kommen.</div>
+            </div>
+          </div>
 
-        <p class="lead" style="margin-bottom:14px">
-          Detailvideo: Was es ist, wie du es nutzt und warum kleine Rituale den Alltag stabilisieren.
-        </p>
+          <div class="card">
+            <div class="pad">
+              <div class="kicker"><span class="dot" aria-hidden="true"></span> Schritt 2</div>
+              <div style="font-weight:900; font-size:16px; margin-top:10px">4 bis 6 Atemzüge</div>
+              <div class="sub">Ruhig ausatmen. Das ist der Reset.</div>
+            </div>
+          </div>
 
-        <video
-          controls
-          preload="metadata"
-          style="
-            width:100%;
-            border-radius:18px;
-            border:1px solid var(--line);
-            box-shadow: var(--shadow2);
-          "
-        >
-          <source src="video-erklaerung-v2.mp4" type="video/mp4" />
-          Dein Browser unterstützt dieses Video nicht.
-        </video>
-
-        <div class="fineprint" style="margin-top:12px">
-          Hinweis: Dieses Produkt ersetzt keine medizinische oder psychotherapeutische Behandlung.
+          <div class="card">
+            <div class="pad">
+              <div class="kicker"><span class="dot" aria-hidden="true"></span> Schritt 3</div>
+              <div style="font-weight:900; font-size:16px; margin-top:10px">Ein klarer nächster Schritt</div>
+              <div class="sub">Nicht perfekt. Nur klar. Weitergehen.</div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
+    <section class="section" id="erklaervideo">
+      <div class="container">
+        <div class="card shadowBig">
+          <div class="padLg">
+            <div class="kicker">
+              <span class="dot" aria-hidden="true"></span>
+              Erklärvideo
+            </div>
+
+            <p class="lead" style="margin:12px 0 14px">
+              Detailvideo: Was es ist, wie du es nutzt und warum kleine Rituale den Alltag stabilisieren.
+            </p>
+
+            <video
+              controls
+              preload="metadata"
+              style="
+                width:100%;
+                border-radius:18px;
+                border:1px solid var(--line);
+                box-shadow: var(--shadow2);
+                display:block;
+              "
+            >
+              <source src="video-erklaerung-v2.mp4" type="video/mp4" />
+              Dein Browser unterstützt dieses Video nicht.
+            </video>
+
+            <div class="fineprint" style="margin-top:12px">
+              Hinweis: Dieses Produkt ersetzt keine medizinische oder psychotherapeutische Behandlung.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <footer>
       <div class="container">
@@ -189,17 +198,23 @@
 
   <script src="app.js"></script>
   <script>
-    document.getElementById("quickAdd").addEventListener("click", () => {
-      addToCart({
-        id: "an:care Stick_calm",
-        name: "an:care Stick Calm",
-        note: "Lavendel Bergamotte Vetiver",
-        price: 19.90,
-        qty: 1
+    // Falls du keinen Button mit id="quickAdd" auf der Seite hast:
+    // Dieser Block verhindert einen Fehler in der Konsole.
+    const quickAddBtn = document.getElementById("quickAdd");
+    if (quickAddBtn) {
+      quickAddBtn.addEventListener("click", () => {
+        addToCart({
+          id: "an:care Stick_calm",
+          name: "an:care Stick Calm",
+          note: "Lavendel Bergamotte Vetiver",
+          price: 19.90,
+          qty: 1
+        });
+        alert("Im Prototyp hinzugefügt. Öffne jetzt die Produktseite für Details.");
       });
-      alert("Im Prototyp hinzugefügt. Öffne jetzt die Produktseite für Details.");
-    });
+    }
   </script>
 </body>
 </html>
+
 
