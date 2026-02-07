@@ -655,6 +655,49 @@ select, input{
   font-size: 12.5px;
   line-height: 1.45;
 }
+.soonBadge{
+  display:inline-flex;
+  align-items:center;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background: rgba(11,95,255,.06);
+  color: rgba(11,95,255,.95);
+  font-weight:800;
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background: rgba(11,27,58,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:999;
+}
+.modal.open{ display:flex; }
+
+.modalCard{
+  width:min(680px, 100%);
+  border-radius:24px;
+  background: var(--white);
+  border:1px solid var(--line);
+  box-shadow: 0 30px 80px rgba(11,27,58,.25);
+  overflow:hidden;
+}
+
+.modalTop{
+  padding:18px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid var(--line);
+  background: rgba(255,255,255,.92);
+}
 
 
 
