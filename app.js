@@ -1,195 +1,282 @@
-const CART_KEY = "anker_cart_v1";
+/* =========================
+   an:care Prototyp Logik
+   Warenkorb und Nachfrage Tracking
+   Speichert alles lokal im Browser
+========================= */
 
-function loadCart(){
-  try{
-    return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+const CART_KEY = "ancare_cart_v1";
+const INTEREST_KEY = "ancare_interest_v1";
+
+/* ---------- Helpers ---------- */
+function euro(n) {
+  const val = typeof n === "number" ? n : parseFloat(n || "0");
+  return val.toFixed(2).replace(".", ",") + " EUR";
+}
+
+function safeJsonParse(str, fallback) {
+  try {
+    return JSON.parse(str);
   } catch {
-    return [];
+    return fallback;
   }
 }
 
-function saveCart(cart){
+/* ---------- Cart ---------- */
+function loadCart() {
+  return safeJsonParse(localStorage.getItem(CART_KEY), []);
+}
+
+function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
-}
-
-function cartCount(){
-  const cart = loadCart();
-  return cart.reduce((s, i) => s + (i.qty || 0), 0);
-}
-
-function setCartBadge(){
-  const el = document.getElementById("cartCount");
-  if(el) el.textContent = String(cartCount());
-}
-
-function addToCart(item){
-  const cart = loadCart();
-  const existing = cart.find(x => x.id === item.id);
-  if(existing){
-    existing.qty += item.qty || 1;
-  } else {
-    cart.push({ ...item, qty: item.qty || 1 });
-  }
-  saveCart(cart);
   setCartBadge();
 }
 
-function moneyEUR(n){
-  const fixed = (Math.round(n * 100) / 100).toFixed(2);
-  return fixed.replace(".", ",") + " EUR";
+function clearCart() {
+  localStorage.removeItem(CART_KEY);
+  setCartBadge();
 }
 
-function renderMiniCart(){
-  const wrap = document.getElementById("miniCart");
+function addToCart(itemOrName) {
+  // Unterstützt alten Aufruf addToCart("an:care Calm") und neuen addToCart({ ... })
+  const cart = loadCart();
+
+  let item = null;
+  if (typeof itemOrName === "string") {
+    // Fallback Artikel
+    item = {
+      id: "ancare_unknown",
+      name: itemOrName,
+      note: "",
+      price: 0,
+      qty: 1,
+    };
+  } else {
+    item = itemOrName;
+  }
+
+  // Sicherheits Defaults
+  item.id = item.id || "ancare_unknown";
+  item.name = item.name || "an:care";
+  item.note = item.note || "";
+  item.price = typeof item.price === "number" ? item.price : parseFloat(item.price || "0");
+  item.qty = Math.max(1, parseInt(item.qty || "1", 10));
+
+  const existing = cart.find((x) => x.id === item.id);
+  if (existing) {
+    existing.qty += item.qty;
+  } else {
+    cart.push({ ...item });
+  }
+
+  saveCart(cart);
+}
+
+function cartCount() {
+  const cart = loadCart();
+  return cart.reduce((sum, x) => sum + (parseInt(x.qty || 0, 10) || 0), 0);
+}
+
+function cartTotal() {
+  const cart = loadCart();
+  return cart.reduce((sum, x) => sum + (Number(x.price || 0) * Number(x.qty || 0)), 0);
+}
+
+function setCartBadge() {
+  const el = document.getElementById("cartCount");
+  if (!el) return;
+  el.textContent = String(cartCount());
+}
+
+/* Mini Cart Rendering: optional on product page */
+function renderMiniCart() {
+  const host = document.getElementById("miniCart");
   const totalEl = document.getElementById("miniCartTotal");
-  if(!wrap || !totalEl) return;
+  if (!host) return;
 
   const cart = loadCart();
-  if(cart.length === 0){
-    wrap.innerHTML = `<p style="margin:0; color:var(--muted); font-size:13.5px">Warenkorb ist noch leer.</p>`;
-    totalEl.textContent = moneyEUR(0);
+  if (cart.length === 0) {
+    host.innerHTML = `<div class="sub">Dein Warenkorb ist aktuell leer.</div>`;
+    if (totalEl) totalEl.textContent = euro(0);
     return;
   }
 
-  const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
-  totalEl.textContent = moneyEUR(total);
+  const rows = cart
+    .map((x, idx) => {
+      const title = x.name || "an:care";
+      const note = x.note ? `<div class="sub" style="margin-top:4px">${x.note}</div>` : "";
+      return `
+        <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--line)">
+          <div style="min-width:0">
+            <div style="font-weight:800">${title}</div>
+            ${note}
+            <div class="sub" style="margin-top:6px">Menge: ${x.qty}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="price">${euro(Number(x.price || 0) * Number(x.qty || 0))}</div>
+            <button class="btn btnSmall" type="button" data-remove-index="${idx}" style="margin-top:8px">Entfernen</button>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
 
-  wrap.innerHTML = cart.map(i => `
-    <div style="display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--line)">
-      <div>
-        <div style="font-weight:800; font-size:13.5px">${i.name}</div>
-        <div style="color:var(--muted); font-size:12.5px; margin-top:4px">${i.note || ""}</div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-family:var(--mono); font-size:12.5px">${i.qty} x ${moneyEUR(i.price)}</div>
+  host.innerHTML = rows;
+
+  // Remove handlers
+  host.querySelectorAll("[data-remove-index]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = parseInt(btn.getAttribute("data-remove-index"), 10);
+      const next = loadCart();
+      next.splice(i, 1);
+      saveCart(next);
+      renderMiniCart();
+    });
+  });
+
+  if (totalEl) totalEl.textContent = euro(cartTotal());
+}
+
+/* ---------- Interest Tracking ---------- */
+function loadInterest() {
+  return safeJsonParse(localStorage.getItem(INTEREST_KEY), {
+    events: [],
+    totals: {},
+  });
+}
+
+function saveInterest(data) {
+  localStorage.setItem(INTEREST_KEY, JSON.stringify(data));
+}
+
+function trackInterest(payload) {
+  // payload: { variant, name, source, note }
+  const data = loadInterest();
+
+  const event = {
+    ts: new Date().toISOString(),
+    variant: payload.variant || "unknown",
+    name: payload.name || "an:care",
+    source: payload.source || "shop",
+    note: payload.note || "",
+  };
+
+  data.events.push(event);
+  data.totals[event.variant] = (data.totals[event.variant] || 0) + 1;
+
+  saveInterest(data);
+  return data;
+}
+
+function exportInterestCsv() {
+  const data = loadInterest();
+  const header = ["timestamp", "variant", "name", "source", "note"];
+  const lines = [header.join(";")];
+
+  for (const e of data.events) {
+    const row = [
+      e.ts,
+      e.variant,
+      e.name,
+      e.source,
+      (e.note || "").replaceAll(";", ","),
+    ];
+    lines.push(row.join(";"));
+  }
+
+  const csv = lines.join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "ancare_nachfrage.csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+function renderInterestPanel() {
+  const host = document.getElementById("interestPanel");
+  if (!host) return;
+
+  const data = loadInterest();
+  const totals = data.totals || {};
+
+  const items = Object.keys(totals)
+    .sort((a, b) => totals[b] - totals[a])
+    .map((k) => `<div style="display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid var(--line)">
+      <div style="font-weight:800">${k}</div>
+      <div class="price">${totals[k]}</div>
+    </div>`)
+    .join("");
+
+  host.innerHTML = `
+    <div class="card shadowBig" style="margin-top:18px">
+      <div class="padLg">
+        <div class="kicker"><span class="dot" aria-hidden="true"></span> Nachfrage Tracking</div>
+        <h2 style="margin:12px 0 6px; font-size:20px">Interesse an Varianten</h2>
+        <p class="sub" style="margin:0 0 12px">Zählt Klicks auf Interesse Buttons. Alles lokal im Browser gespeichert.</p>
+
+        <div style="border:1px solid var(--line); border-radius:18px; padding:14px; background:rgba(255,255,255,.65)">
+          ${items || `<div class="sub">Noch keine Nachfrage erfasst.</div>`}
+        </div>
+
+        <div class="ctaRow" style="margin-top:14px">
+          <button class="btn btnPrimary" type="button" id="exportInterest">CSV Export</button>
+          <button class="btn" type="button" id="clearInterest">Zurücksetzen</button>
+        </div>
       </div>
     </div>
-  `).join("");
+  `;
+
+  const exportBtn = document.getElementById("exportInterest");
+  const clearBtn = document.getElementById("clearInterest");
+
+  if (exportBtn) exportBtn.addEventListener("click", exportInterestCsv);
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      localStorage.removeItem(INTEREST_KEY);
+      renderInterestPanel();
+      alert("Nachfrage im Prototyp zurückgesetzt.");
+    });
+  }
 }
 
-function clearCart(){
-  saveCart([]);
-  setCartBadge();
+/* ---------- Auto wiring for Shop buttons ---------- */
+function wireInterestButtons() {
+  // Buttons müssen data-interest tragen
+  const buttons = document.querySelectorAll("[data-interest]");
+  if (!buttons.length) return;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const variant = btn.getAttribute("data-interest") || "unknown";
+      const name = btn.getAttribute("data-name") || "an:care";
+      const source = btn.getAttribute("data-source") || "shop";
+      const note = btn.getAttribute("data-note") || "";
+
+      const data = trackInterest({ variant, name, source, note });
+
+      // UX Feedback
+      btn.textContent = "Interesse gespeichert";
+      btn.disabled = true;
+
+      // Panel aktualisieren falls vorhanden
+      renderInterestPanel();
+
+      // Optional kurzer Hinweis
+      console.log("Nachfrage gespeichert:", variant, data.totals);
+    });
+  });
 }
 
+/* ---------- Init ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   setCartBadge();
-  renderMiniCart();
+  if (typeof renderMiniCart === "function") renderMiniCart();
+  wireInterestButtons();
+  renderInterestPanel();
 });
-const COMMUNITY_KEY = "anker_community_v1";
-const PODCAST_KEY = "anker_podcast_v1";
 
-function loadCommunityPosts(){
-  try{
-    return JSON.parse(localStorage.getItem(COMMUNITY_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function saveCommunityPosts(posts){
-  localStorage.setItem(COMMUNITY_KEY, JSON.stringify(posts));
-}
-
-function seedCommunityPosts(){
-  const existing = loadCommunityPosts();
-  if(existing.length > 0) return;
-
-  const now = Date.now();
-  const demo = [
-    {
-      id: "p1",
-      author: "Team Anker",
-      topic: "rituale",
-      title: "Mein Zwei Minuten Reset vor Meetings",
-      body: "Kurz riechen, 4 6 Atmung, dann eine klare nächste Aktion. Hilft mir, nicht zu hetzen.",
-      likes: 3,
-      comments: [{ author: "Maurice", text: "Sehr gut. Genau so simpel muss es sein.", createdAt: now - 20000 }],
-      createdAt: now - 86400000
-    },
-    {
-      id: "p2",
-      author: "Anonym",
-      topic: "schlaf",
-      title: "Abendroutine ohne Druck",
-      body: "Ich mache nur zwei Dinge: Licht runter und einen ruhigen Moment. Alles andere ist Bonus.",
-      likes: 5,
-      comments: [],
-      createdAt: now - 3600000
-    },
-    {
-      id: "p3",
-      author: "Community",
-      topic: "fragen",
-      title: "Welche Situationen sind für euch am schwierigsten",
-      body: "Ich suche konkrete Ideen: morgens, unterwegs, vor Gesprächen. Was triggert euch am meisten",
-      likes: 1,
-      comments: [],
-      createdAt: now - 120000
-    }
-  ];
-
-  saveCommunityPosts(demo);
-}
-
-function loadPodcastEpisodes(){
-  try{
-    return JSON.parse(localStorage.getItem(PODCAST_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function savePodcastEpisodes(eps){
-  localStorage.setItem(PODCAST_KEY, JSON.stringify(eps));
-}
-
-function seedPodcastEpisodes(){
-  const existing = loadPodcastEpisodes();
-  if(existing.length > 0) return;
-
-  const now = Date.now();
-  const demo = [
-{
-  id: "e1",
-  number: "01",
-  title: "Der Ankerstick im Detail",
-  teaser: "Wir erforschen worum es sich bei dem Produkt Ankerstick handelt.",
-  duration: "12 min",
-  publishedAt: now - 10 * 86400000,
-  description: "Was und wer steckt hinter dieser faszinierenden Idee?",
-  audioUrl: "episode01.mp3",
-  spotifyUrl: "#",
-  appleUrl: "#",
-  webUrl: "#"
-},
-    {
-      id: "e2",
-      number: "02",
-      title: "Unruhe verstehen, ohne sie zu bekämpfen",
-      teaser: "Warum Kontrolle oft Druck erzeugt und was besser funktioniert.",
-      duration: "12 min",
-      publishedAt: now - 6 * 86400000,
-      description: "Du bekommst eine ruhige Perspektive und zwei praktische Mikro Impulse, die sich leicht umsetzen lassen.",
-      audioUrl: "",
-      spotifyUrl: "#",
-      appleUrl: "#",
-      webUrl: "#"
-    },
-    {
-      id: "e3",
-      number: "03",
-      title: "Fokus starten: die erste Minute zählt",
-      teaser: "Eine kleine Startsequenz für Deep Work und saubere Übergänge.",
-      duration: "9 min",
-      publishedAt: now - 2 * 86400000,
-      description: "Wir bauen eine kurze Startsequenz, die dich in Handlung bringt. Kein Perfektionismus, nur Richtung.",
-      audioUrl: "",
-      spotifyUrl: "#",
-      appleUrl: "#",
-      webUrl: "#"
-    }
-  ];
-
-  savePodcastEpisodes(demo);
-}
