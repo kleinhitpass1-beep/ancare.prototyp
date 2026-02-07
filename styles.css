@@ -473,5 +473,18 @@ select, input{
   overflow:hidden;
   box-shadow:0 20px 40px rgba(11,95,255,.12);
 }
+.waveImage{
+  margin-top: 28px;
+  display:flex;
+  justify-content:center;
+}
+
+.waveImage img{
+  width:100%;
+  max-width:520px;
+  border-radius:22px;
+  box-shadow:0 30px 60px rgba(11,27,58,.12);
+  object-fit:cover;
+}
 
 
