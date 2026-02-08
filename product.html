@@ -336,14 +336,140 @@
       if(success) success.style.display = "none";
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      syncShippingAndPaymentFromStorage();
+<script>
+  function formatEUR(n){
+    return (Number(n || 0)).toFixed(2).replace(".", ",") + " EUR";
+  }
 
-      window.renderMiniCart?.();
-      window.setCartBadge?.();
+  function calcSubtotal(cart){
+    return (cart || []).reduce((sum, item) => sum + (Number(item.price||0) * Number(item.qty||0)), 0);
+  }
 
-      updateGrandTotal();
+  function getShipping(){
+    const v = parseFloat(document.getElementById("shippingSelect")?.value || "0");
+    return isNaN(v) ? 0 : v;
+  }
+
+  function setGrandTotalFromSubtotal(subtotal){
+    const grand = subtotal + getShipping();
+    const out = document.getElementById("grandTotal");
+    if(out) out.textContent = formatEUR(grand);
+  }
+
+  function setPayActive(){
+    const chosen = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+    document.querySelectorAll(".payOption").forEach(el => {
+      el.classList.toggle("isActive", el.getAttribute("data-pay") === chosen);
     });
-  </script>
-</body>
-</html>
+  }
+
+  function renderCartFallback(cart){
+    const host = document.getElementById("miniCart");
+    const totalEl = document.getElementById("miniCartTotal");
+
+    if(!host || !totalEl) return;
+
+    if(!cart || cart.length === 0){
+      host.innerHTML = `<div class="sub">Noch keine Produkte im Warenkorb.</div>`;
+      totalEl.textContent = formatEUR(0);
+      setGrandTotalFromSubtotal(0);
+      return;
+    }
+
+    host.innerHTML = cart.map(item => {
+      const line = (Number(item.price||0) * Number(item.qty||0));
+      return `
+        <div class="card" style="margin-bottom:10px; background:rgba(255,255,255,.7)">
+          <div class="pad" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-start">
+            <div style="min-width:0">
+              <div style="font-weight:900">${item.name || "Produkt"}</div>
+              <div class="sub" style="margin-top:6px">${item.note || ""}</div>
+              <div class="sub" style="margin-top:6px">Menge: ${item.qty || 1}</div>
+            </div>
+            <div class="price">${formatEUR(line)}</div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    const subtotal = calcSubtotal(cart);
+    totalEl.textContent = formatEUR(subtotal);
+    setGrandTotalFromSubtotal(subtotal);
+  }
+
+  function readCartSafely(){
+    if(typeof window.loadCart === "function"){
+      return window.loadCart() || [];
+    }
+
+    try{
+      const raw = localStorage.getItem("ancare_cart_v1");
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    }catch{
+      return [];
+    }
+  }
+
+  function writeCartSafely(cart){
+    if(typeof window.saveCart === "function"){
+      window.saveCart(cart);
+      return;
+    }
+    localStorage.setItem("ancare_cart_v1", JSON.stringify(cart || []));
+  }
+
+  function refreshCartUI(){
+    if(typeof window.renderMiniCart === "function"){
+      window.renderMiniCart();
+    }
+    const cart = readCartSafely();
+    renderCartFallback(cart);
+
+    if(typeof window.setCartBadge === "function"){
+      window.setCartBadge();
+    }else{
+      const badge = document.getElementById("cartCount");
+      if(badge) badge.textContent = String((cart||[]).reduce((s,i)=>s+Number(i.qty||0),0));
+    }
+  }
+
+  document.getElementById("shippingSelect")?.addEventListener("change", () => {
+    localStorage.setItem("ancare_shipping_v1", document.getElementById("shippingSelect").value);
+    refreshCartUI();
+  });
+
+  document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
+    r.addEventListener("change", () => {
+      localStorage.setItem("ancare_payment_v1", r.value);
+      setPayActive();
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const ship = localStorage.getItem("ancare_shipping_v1");
+    if(ship && document.getElementById("shippingSelect")) document.getElementById("shippingSelect").value = ship;
+
+    const pay = localStorage.getItem("ancare_payment_v1");
+    if(pay){
+      const r = document.querySelector(`input[name="paymentMethod"][value="${pay}"]`);
+      if(r) r.checked = true;
+    }
+
+    setPayActive();
+    refreshCartUI();
+  });
+
+  // Wichtig: Wenn du auf "In den Warenkorb" klickst, danach UI aktualisieren
+  document.getElementById("addBtn")?.addEventListener("click", () => {
+    setTimeout(refreshCartUI, 50);
+  });
+
+  document.getElementById("clear")?.addEventListener("click", () => {
+    setTimeout(refreshCartUI, 50);
+  });
+
+  document.getElementById("fakePay")?.addEventListener("click", () => {
+    setTimeout(refreshCartUI, 50);
+  });
+</script>
