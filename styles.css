@@ -971,6 +971,67 @@ select, input{
   opacity: 1;
   transform: translateY(0);
 }
+/* Marketing: Channel Logo + Hover Preview (clean) */
+
+/* Karte darf die Vorschau NICHT abschneiden */
+.channelCard{
+  position: relative;
+  overflow: visible;
+}
+
+/* Badge sitzt oben rechts */
+.channelBadge{
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.95);
+  border: 1px solid rgba(11,27,58,.12);
+  box-shadow: 0 10px 25px rgba(11,27,58,.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+/* Logo im Badge */
+.channelLogo{
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  cursor: pointer;
+}
+
+/* Vorschau ist standardmäßig verborgen */
+.channelPreview{
+  position: absolute;
+  top: 58px;
+  right: 0;
+  width: 260px;
+  max-width: 75vw;
+  height: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(11,27,58,.12);
+  box-shadow: 0 20px 45px rgba(11,27,58,.18);
+  background: #fff;
+
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 30;
+}
+
+/* Hover auf Badge ODER Logo zeigt Vorschau */
+.channelBadge:hover .channelPreview,
+.channelLogo:hover + .channelPreview{
+  opacity: 1;
+  transform: translateY(0);
+}
 
 
 
