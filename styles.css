@@ -1203,6 +1203,22 @@ input:not([type="radio"]):not([type="checkbox"]){
     height: 160px;
   }
 }
+/* Calm: Buttons nebeneinander, Warenkorb Button wieder breit wie vorher */
+.shopCard .ctaRow{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:nowrap;
+}
+
+.shopCard .ctaRow .btn{
+  white-space:nowrap;
+}
+
+.shopCard .ctaRow .btnPrimary{
+  min-width: 240px;
+  justify-content:center;
+}
 
 
 
