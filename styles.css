@@ -1023,6 +1023,29 @@ input:not([type="radio"]):not([type="checkbox"]){
 @media (max-width: 980px){
   .cartLayout{ grid-template-columns: 1fr; }
 }
+.payOption{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background: rgba(255,255,255,.75);
+  box-shadow: 0 10px 22px rgba(11,27,58,.05);
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.payOption input{
+  width:auto;
+  box-shadow:none;
+  margin:0;
+}
+
+.payOption:hover{
+  border-color: rgba(11,95,255,.25);
+}
 
 
 
