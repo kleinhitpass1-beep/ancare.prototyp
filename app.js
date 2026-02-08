@@ -14,11 +14,7 @@ function euro(n) {
 }
 
 function safeJsonParse(str, fallback) {
-  try {
-    return JSON.parse(str);
-  } catch {
-    return fallback;
-  }
+  try { return JSON.parse(str); } catch { return fallback; }
 }
 
 function slugify(str) {
@@ -47,6 +43,16 @@ function clearCart() {
   localStorage.removeItem(CART_KEY);
   setCartBadge();
   renderMiniCart();
+}
+
+function cartCount() {
+  const cart = loadCart();
+  return cart.reduce((sum, x) => sum + (parseInt(x.qty || 0, 10) || 0), 0);
+}
+
+function cartTotal() {
+  const cart = loadCart();
+  return cart.reduce((sum, x) => sum + (Number(x.price || 0) * Number(x.qty || 0)), 0);
 }
 
 /**
@@ -93,7 +99,7 @@ function addToCart(itemOrName) {
     if (!Number.isFinite(item.price) || item.price <= 0) item.price = 13.99;
   } else {
     console.warn("[an:care] addToCart: ungueltiger Parameter", itemOrName);
-    return;
+    return null;
   }
 
   const existing = cart.find((x) => x.id === item.id);
@@ -104,36 +110,29 @@ function addToCart(itemOrName) {
   }
 
   saveCart(cart);
-  setCartBadge();
   renderMiniCart();
-
   return item;
 }
 
-function cartCount() {
-  const cart = loadCart();
-  return cart.reduce((sum, x) => sum + (parseInt(x.qty || 0, 10) || 0), 0);
-}
-
-function cartTotal() {
-  const cart = loadCart();
-  return cart.reduce((sum, x) => sum + (Number(x.price || 0) * Number(x.qty || 0)), 0);
-}
-
 function setCartBadge() {
-  const el = document.getElementById("cartCount");
-  if (!el) return;
-  el.textContent = String(cartCount());
+  // unterstützt mehrere Badges, falls du später mehr willst
+  const count = String(cartCount());
+
+  const byId = document.getElementById("cartCount");
+  if (byId) byId.textContent = count;
+
+  document.querySelectorAll("[data-cart-count]").forEach((el) => {
+    el.textContent = count;
+  });
 }
 
-/* Mini Cart Rendering: optional on product page */
+/* Mini Cart Rendering: optional auf product.html */
 function renderMiniCart() {
   const host = document.getElementById("miniCart");
   const totalEl = document.getElementById("miniCartTotal");
   if (!host) return;
 
   const cart = loadCart();
-
   if (cart.length === 0) {
     host.innerHTML = `<div class="sub">Dein Warenkorb ist aktuell leer.</div>`;
     if (totalEl) totalEl.textContent = euro(0);
@@ -173,7 +172,7 @@ function renderMiniCart() {
   if (totalEl) totalEl.textContent = euro(cartTotal());
 }
 
-/* ---------- Interest Tracking ---------- */
+/* ---------- Interest ---------- */
 function loadInterest() {
   return safeJsonParse(localStorage.getItem(INTEREST_KEY), { events: [], totals: {} });
 }
@@ -201,7 +200,6 @@ function trackInterest(payload) {
   return data;
 }
 
-/* Optional Panel auf shop.html (div id="interestPanel") */
 function renderInterestPanel() {
   const host = document.getElementById("interestPanel");
   if (!host) return;
@@ -247,25 +245,23 @@ function renderInterestPanel() {
   }
 }
 
-/* ---------- Auto wiring ---------- */
-/* Warenkorb Buttons: <button data-add-to-cart data-id="" data-name="" data-note="" data-price="13.99" data-qty="1"> */
+/* ---------- Wiring: data Attribute Buttons ---------- */
 function wireCartButtons() {
   const buttons = document.querySelectorAll("[data-add-to-cart]");
   buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-id") || ("ancare_" + slugify(btn.getAttribute("data-name") || "item"));
-      const name = btn.getAttribute("data-name") || "an:care";
+      const nameAttr = btn.getAttribute("data-name") || "an:care";
+      const id = btn.getAttribute("data-id") || ("ancare_" + slugify(nameAttr));
       const note = btn.getAttribute("data-note") || "";
       const price = parseFloat(btn.getAttribute("data-price") || "0");
       const qty = parseInt(btn.getAttribute("data-qty") || "1", 10);
 
-      addToCart({ id, name, note, price, qty });
+      addToCart({ id, name: nameAttr, note, price, qty });
       alert("Im Prototyp in den Warenkorb gelegt.");
     });
   });
 }
 
-/* Interesse Buttons: <button data-interest="focus" data-name="an:care Stick Focus"> */
 function wireInterestButtons() {
   const buttons = document.querySelectorAll("[data-interest]");
   buttons.forEach((btn) => {
@@ -284,21 +280,69 @@ function wireInterestButtons() {
   });
 }
 
+/* ---------- Optional: Modal Support (falls vorhanden) ---------- */
+let __interestVariantName = "";
+function openInterest(variantName) {
+  __interestVariantName = variantName || "unknown";
+  const modal = document.getElementById("interestModal");
+  if (!modal) {
+    // Fallback ohne Modal
+    trackInterest({ variant: __interestVariantName, name: __interestVariantName, source: "shop", note: "" });
+    alert("Interesse gespeichert: " + __interestVariantName);
+    return;
+  }
+  const title = document.getElementById("interestTitle");
+  if (title) title.textContent = "Interesse: " + __interestVariantName;
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeInterest() {
+  const modal = document.getElementById("interestModal");
+  if (!modal) return;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+function submitInterest() {
+  const emailEl = document.getElementById("interestEmail");
+  const noteEl = document.getElementById("interestNote");
+  const email = emailEl ? (emailEl.value || "").trim() : "";
+  const note = noteEl ? (noteEl.value || "").trim() : "";
+
+  trackInterest({
+    variant: __interestVariantName || "unknown",
+    name: __interestVariantName || "an:care",
+    source: "shop",
+    note,
+    email
+  });
+
+  renderInterestPanel();
+  closeInterest();
+  alert("Danke. Interesse wurde gespeichert.");
+}
+
 /* ---------- Init ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   setCartBadge();
-  renderMiniCart();       // macht nichts, wenn es die Elemente nicht gibt
-  wireCartButtons();      // optional, falls du data Attribute nutzt
-  wireInterestButtons();  // optional, falls du data Attribute nutzt
-  renderInterestPanel();  // optional, falls interestPanel existiert
+  renderMiniCart();       // ok wenn nicht vorhanden
+  wireCartButtons();      // ok wenn keine Buttons
+  wireInterestButtons();  // ok wenn keine Buttons
+  renderInterestPanel();  // ok wenn nicht vorhanden
 });
 
-/* Global verfügbar lassen (falls inline onclick genutzt wird) */
+/* Global verfügbar (falls inline onclick genutzt wird) */
 window.addToCart = addToCart;
 window.clearCart = clearCart;
 window.loadCart = loadCart;
 window.renderMiniCart = renderMiniCart;
 window.setCartBadge = setCartBadge;
+
 window.trackInterest = trackInterest;
 window.renderInterestPanel = renderInterestPanel;
+
+window.openInterest = openInterest;
+window.closeInterest = closeInterest;
+window.submitInterest = submitInterest;
 
