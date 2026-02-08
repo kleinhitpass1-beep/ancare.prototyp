@@ -1110,18 +1110,18 @@ input:not([type="radio"]):not([type="checkbox"]){
 .blogCard .pad {
   padding-right: 110px;   /* schafft Platz für Bild */
 }
-/* Shop: Calm Karte wie Referenz (Bild rechts ohne Layout zu strecken) */
+/* Shop: Calm Karte sauber, ohne Umbruch Chaos */
 .shopCard{
   position: relative;
   overflow: hidden;
 }
 
-/* Rechts Platz reservieren, damit nichts unter das Bild läuft */
+/* WICHTIG: kein padding right auf der gesamten Karte */
 .shopCard .pad{
-  padding-right: 190px; /* Platz für Preis und Bild */
+  padding-right: 18px; /* Standard behalten */
 }
 
-/* Oben: links Name und Text, rechts nur der Preis */
+/* Top Row bleibt wie vorher: links Text, rechts Preis */
 .shopCardTop{
   display:flex;
   justify-content:space-between;
@@ -1137,35 +1137,44 @@ input:not([type="radio"]):not([type="checkbox"]){
 .shopCardRight{
   min-width:140px;
   text-align:right;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
 }
 
-/* Bild steht rechts unter dem Preis, beeinflusst aber NICHT die Höhe der Box */
+/* Produktbild rechts unter Preis, ohne Layout zu strecken */
 .shopCardImage{
   position:absolute;
   right: 26px;
-  top: 92px;            /* exakt unterhalb des Preis Badges */
+  top: 92px;            /* unter dem Preis Badge */
   width: 120px;
-  height: 170px;        /* genau wie deine Zielgröße */
+  height: 170px;        /* deine Zielgroesse */
   object-fit: contain;
   background: transparent;
   border-radius: 0;
   box-shadow: none;
-  pointer-events: none;
+  pointer-events:none;
 }
 
-/* Mobile: Bild wird normal unter den Preis gesetzt */
-@media (max-width: 720px){
-  .shopCard .pad{
-    padding-right: 18px;
-  }
+/* Platz nur da reservieren, wo sonst Text und Buttons unter das Bild laufen */
+.shopCard .tagRow,
+.shopCard .ctaRow{
+  padding-right: 170px; /* Platz fuer das Bild rechts */
+}
 
+/* Mobile: Bild normal im Flow unter Preis, kein reservierter Platz */
+@media (max-width: 720px){
   .shopCardImage{
     position: static;
-    margin-top: 12px;
     width: 120px;
     height: 160px;
     display:block;
-    margin-left:auto;
+    margin: 12px 0 0 auto;
+  }
+
+  .shopCard .tagRow,
+  .shopCard .ctaRow{
+    padding-right: 0;
   }
 }
 
