@@ -129,6 +129,49 @@
             <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:12px; flex-wrap:wrap">
               <div style="color:var(--muted); font-size:13.5px">Zwischensumme</div>
               <div class="price" id="miniCartTotal">0,00 EUR</div>
+              <div class="card" style="margin-top:14px; background:rgba(255,255,255,.7)">
+  <div class="pad">
+    <div style="font-weight:900; margin-bottom:10px">Versand und Zahlung</div>
+
+    <div class="field">
+      <label for="shippingSelect">Versand</label>
+      <select id="shippingSelect">
+        <option value="dhl_399">DHL Versand 3,99 EUR</option>
+        <option value="pickup_0">Abholung 0,00 EUR</option>
+      </select>
+    </div>
+
+    <div class="field" style="margin-top:14px">
+      <label>Zahlungsart</label>
+      <div style="display:grid; gap:10px">
+        <label style="display:flex; gap:10px; align-items:center; margin:0">
+          <input type="radio" name="paymentMethod" value="paypal" checked />
+          PayPal
+        </label>
+
+        <label style="display:flex; gap:10px; align-items:center; margin:0">
+          <input type="radio" name="paymentMethod" value="rechnung" />
+          Rechnung
+        </label>
+
+        <label style="display:flex; gap:10px; align-items:center; margin:0">
+          <input type="radio" name="paymentMethod" value="kreditkarte" />
+          Kreditkarte
+        </label>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:14px; flex-wrap:wrap">
+      <div style="color:var(--muted); font-size:13.5px">Gesamtsumme inkl Versand</div>
+      <div class="price" id="grandTotal">0,00 EUR</div>
+    </div>
+
+    <div class="fineprint" style="margin-top:12px">
+      Hinweis: Prototyp. Auswahl wird lokal im Browser gespeichert.
+    </div>
+  </div>
+</div>
+
             </div>
 
             <div class="ctaRow" style="margin-top:12px">
