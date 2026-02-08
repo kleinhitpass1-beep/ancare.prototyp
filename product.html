@@ -182,61 +182,85 @@
     </footer>
   </main>
 
-  <script src="app.js"></script>
-  <script>
-    const product = { id:"ancare_stick_calm", name:"an:care Stick Calm", note:"Lavendel Bergamotte Vetiver", price:13.99 };
+<script src="app.js"></script>
+<script>
+  const product = { id:"ancare_stick_calm", name:"an:care Stick Calm", note:"Lavendel Bergamotte Vetiver", price:13.99 };
 
-    document.querySelectorAll(".thumb").forEach(t => {
-      t.addEventListener("click", () => {
-        const src = t.getAttribute("data-src");
-        document.getElementById("mainImage").src = src;
-      });
+  // Thumbnails
+  document.querySelectorAll(".thumb").forEach((t) => {
+    t.addEventListener("click", () => {
+      const src = t.getAttribute("data-src");
+      const main = document.getElementById("mainImage");
+      if (main && src) main.src = src;
+    });
+  });
+
+  // Safe helper (falls app.js nicht geladen wurde)
+  function ensure(fnName){
+    return (typeof window[fnName] === "function");
+  }
+
+  document.getElementById("addBtn")?.addEventListener("click", () => {
+    if(!ensure("addToCart")){
+      alert("Fehler: app.js wurde nicht geladen. Bitte Seite neu laden (Ctrl+F5).");
+      return;
+    }
+
+    const qty = Math.max(1, parseInt(document.getElementById("qty")?.value || "1", 10));
+
+    window.addToCart({
+      id: product.id,
+      name: product.name,
+      note: product.note,
+      price: product.price,
+      qty
     });
 
-    document.getElementById("addBtn").addEventListener("click", () => {
-      const qty = Math.max(1, parseInt(document.getElementById("qty").value || "1", 10));
+    window.renderMiniCart?.();
+    window.setCartBadge?.();
+    alert("Im Prototyp hinzugefügt.");
+  });
 
-      addToCart({
-        id: product.id,
-        name: product.name,
-        note: product.note,
-        price: product.price,
-        qty
-      });
+  document.getElementById("buyBtn")?.addEventListener("click", () => {
+    document.getElementById("warenkorb")?.scrollIntoView({ behavior: "smooth" });
+  });
 
-      if(typeof renderMiniCart === "function") renderMiniCart();
-      if(typeof setCartBadge === "function") setCartBadge();
-      alert("Im Prototyp hinzugefügt.");
-    });
+  document.getElementById("fakePay")?.addEventListener("click", () => {
+    if(!ensure("loadCart") || !ensure("clearCart")){
+      alert("Fehler: app.js wurde nicht geladen. Bitte Seite neu laden (Ctrl+F5).");
+      return;
+    }
 
-    document.getElementById("buyBtn").addEventListener("click", () => {
-      const el = document.getElementById("warenkorb");
-      el.scrollIntoView({ behavior: "smooth" });
-    });
+    const cart = window.loadCart();
+    if(cart.length === 0){
+      alert("Warenkorb ist leer.");
+      return;
+    }
 
-    document.getElementById("fakePay").addEventListener("click", () => {
-      const cart = loadCart();
-      if(cart.length === 0){
-        alert("Warenkorb ist leer.");
-        return;
-      }
-      clearCart();
-      if(typeof renderMiniCart === "function") renderMiniCart();
-      if(typeof setCartBadge === "function") setCartBadge();
-      document.getElementById("success").style.display = "block";
-    });
+    window.clearCart();
+    window.renderMiniCart?.();
+    window.setCartBadge?.();
+    const success = document.getElementById("success");
+    if(success) success.style.display = "block";
+  });
 
-    document.getElementById("clear").addEventListener("click", () => {
-      clearCart();
-      if(typeof renderMiniCart === "function") renderMiniCart();
-      if(typeof setCartBadge === "function") setCartBadge();
-      document.getElementById("success").style.display = "none";
-    });
+  document.getElementById("clear")?.addEventListener("click", () => {
+    if(!ensure("clearCart")){
+      alert("Fehler: app.js wurde nicht geladen. Bitte Seite neu laden (Ctrl+F5).");
+      return;
+    }
+    window.clearCart();
+    window.renderMiniCart?.();
+    window.setCartBadge?.();
+    const success = document.getElementById("success");
+    if(success) success.style.display = "none";
+  });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      if(typeof renderMiniCart === "function") renderMiniCart();
-      if(typeof setCartBadge === "function") setCartBadge();
-    });
-  </script>
+  // Initial UI
+  document.addEventListener("DOMContentLoaded", () => {
+    window.renderMiniCart?.();
+    window.setCartBadge?.();
+  });
+</script>
 </body>
 </html>
