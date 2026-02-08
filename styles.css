@@ -1099,8 +1099,8 @@ input:not([type="radio"]):not([type="checkbox"]){
   position: absolute;
   bottom: 18px;
   right: 18px;
-  width: 100px;        /* kleiner */
-  height: 100px;       /* kleiner */
+  width: 90px;        /* kleiner */
+  height: 90px;       /* kleiner */
   object-fit: cover;
   border-radius: 14px;
   box-shadow: 0 12px 30px rgba(11,27,58,.15);
