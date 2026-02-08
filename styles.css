@@ -902,25 +902,25 @@ select, input{
   cursor: pointer;
 }
 
-.channelPreview {
+/* Vorschau ist standardmäßig verborgen */
+.channelPreview{
   position: absolute;
+  top: auto;
   bottom: 58px;
   right: 0;
-
   width: 260px;
-  height: 360px;              /* feste Höhe für sauberen Schnitt */
-  object-fit: cover;          /* schneidet sauber */
-  object-position: center;    /* mittig */
-
+  max-width: 75vw;
+  height: auto;
   border-radius: 18px;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.18);
-  border: none;               /* weißen Rand entfernen */
+  border: 1px solid rgba(11,27,58,.12);
+  box-shadow: 0 20px 45px rgba(11,27,58,.18);
+  background: #fff;
 
   opacity: 0;
   transform: translateY(8px);
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 20;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 30;
 }
 
 
