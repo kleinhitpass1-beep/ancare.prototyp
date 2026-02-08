@@ -1116,9 +1116,9 @@ input:not([type="radio"]):not([type="checkbox"]){
   overflow: hidden;
 }
 
-/* KEIN Extra Platz unten reservieren, sonst wirkt alles "leer" */
-.shopCard .pad{
-  padding-bottom: 18px; /* Standard bleibt clean */
+.shopCard{
+  position: relative;
+  overflow: hidden;
 }
 
 .shopCardTop{
@@ -1130,30 +1130,29 @@ input:not([type="radio"]):not([type="checkbox"]){
 
 .shopCardLeft{
   flex:1;
-  min-width: 0;
+  min-width:0;
 }
 
+/* rechter Bereich: Preis oben, Bild darunter, rechts ausgerichtet */
 .shopCardRight{
+  min-width:140px;
   display:flex;
   flex-direction:column;
   align-items:flex-end;
-  gap:12px;
-  min-width: 140px;
 }
 
+/* Bild exakt wie eingezeichnet: unter Preis, aber mit Luft */
 .shopCardImage{
-  width: 120px;
-  height: 150px;          /* fix: verhindert "zu lang" */
-  object-fit: contain;
-  pointer-events: none;
-  display: block;
-  margin-left: auto;
+  margin-top:14px;        /* Abstand zum Preis */
+  width:120px;            /* Breite wie im Screenshot */
+  height:170px;           /* fixe Höhe damit es nicht "zu lang" wird */
+  object-fit:contain;
+  display:block;
+  background:transparent; /* kein weißer Kasten */
+  border-radius:0;        /* kein Rahmen */
+  box-shadow:none;        /* kein Schatten */
+  pointer-events:none;
 }
-.shopCard .pad{
-  padding-bottom: 18px;   /* wieder normal */
-}
-
-
 
 
 
