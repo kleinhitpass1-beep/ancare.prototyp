@@ -427,7 +427,6 @@
   }
 
   function safeParse(str, fallback){
-    if(str == null || str === "") return fallback;
     try { return JSON.parse(str); } catch { return fallback; }
   }
 
@@ -451,6 +450,7 @@
   }
 
   function getCartSubtotal(){
+    // WICHTIG: loadCart ist nur als window.loadCart exportiert
     if(typeof window.loadCart !== "function") return 0;
     const cart = window.loadCart() || [];
     return cart.reduce((sum, item) => {
@@ -505,23 +505,30 @@
     renderGrandTotal();
   }
 
+  function hookCartRerenders(){
+    // Wenn renderMiniCart existiert, hängen wir uns dran, ohne etwas zu zerstören
+    if(typeof window.renderMiniCart === "function" && !window.__ancareGrandHooked){
+      window.__ancareGrandHooked = true;
+      const original = window.renderMiniCart;
+      window.renderMiniCart = function(){
+        const res = original.apply(this, arguments);
+        try { renderGrandTotal(); } catch {}
+        return res;
+      };
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     bindCheckoutUI();
+    hookCartRerenders();
+    renderGrandTotal();
 
+    // Sicherheitsnetz: nach Klicks ebenfalls aktualisieren
     ["addBtn","fakePay","clear"].forEach(id => {
       const b = document.getElementById(id);
       if(b) b.addEventListener("click", () => setTimeout(renderGrandTotal, 60));
     });
-
-    // Wenn renderMiniCart aus app.js laeuft, soll die Gesamtsumme nachziehen
-    if(typeof window.renderMiniCart === "function"){
-      const orig = window.renderMiniCart;
-      window.renderMiniCart = function(){
-        const res = orig.apply(this, arguments);
-        setTimeout(renderGrandTotal, 30);
-        return res;
-      };
-    }
   });
 })();
+
 
