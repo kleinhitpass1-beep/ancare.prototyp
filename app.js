@@ -44,12 +44,14 @@
   /* ---------- Helpers ---------- */
   function euro(n) {
     const val = typeof n === "number" ? n : parseFloat(n || "0");
-    return val.toFixed(2).replace(".", ",") + " EUR";
+    return (Number.isFinite(val) ? val : 0).toFixed(2).replace(".", ",") + " EUR";
   }
 
   function safeJsonParse(str, fallback) {
+    if (str == null || str === "") return fallback; // <<< entscheidender Fix
     try {
-      return JSON.parse(str);
+      const parsed = JSON.parse(str);
+      return parsed == null ? fallback : parsed;
     } catch {
       return fallback;
     }
@@ -67,21 +69,18 @@
       .replace(/^_+|_+$/g, "");
   }
 
-  function setText(id, text) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = text;
-  }
-
   /* =========================
      CART
   ========================= */
   function loadCart() {
-    return safeJsonParse(safeGet(CART_KEY), []);
+    const raw = safeGet(CART_KEY);
+    const parsed = safeJsonParse(raw, []);
+    return Array.isArray(parsed) ? parsed : []; // <<< Fix: immer Array
   }
 
   function saveCart(cart) {
-    safeSet(CART_KEY, JSON.stringify(cart));
+    const list = Array.isArray(cart) ? cart : [];
+    safeSet(CART_KEY, JSON.stringify(list));
     setCartBadge();
   }
 
@@ -229,11 +228,12 @@
      INTEREST
   ========================= */
   function loadInterest() {
-    return safeJsonParse(safeGet(INTEREST_KEY), { events: [], totals: {} });
+    const parsed = safeJsonParse(safeGet(INTEREST_KEY), { events: [], totals: {} });
+    return parsed && typeof parsed === "object" ? parsed : { events: [], totals: {} };
   }
 
   function saveInterest(data) {
-    safeSet(INTEREST_KEY, JSON.stringify(data));
+    safeSet(INTEREST_KEY, JSON.stringify(data || { events: [], totals: {} }));
   }
 
   function trackInterest(payload) {
@@ -246,6 +246,9 @@
       source: payload.source || "shop",
       note: payload.note || ""
     };
+
+    data.events = Array.isArray(data.events) ? data.events : [];
+    data.totals = data.totals && typeof data.totals === "object" ? data.totals : {};
 
     data.events.push(event);
     data.totals[event.variant] = (data.totals[event.variant] || 0) + 1;
@@ -322,11 +325,12 @@
      PODCAST
   ========================= */
   function loadPodcastEpisodes() {
-    return safeJsonParse(safeGet(PODCAST_KEY), []);
+    const parsed = safeJsonParse(safeGet(PODCAST_KEY), []);
+    return Array.isArray(parsed) ? parsed : [];
   }
 
   function savePodcastEpisodes(list) {
-    safeSet(PODCAST_KEY, JSON.stringify(list));
+    safeSet(PODCAST_KEY, JSON.stringify(Array.isArray(list) ? list : []));
   }
 
   function seedPodcastEpisodes() {
@@ -377,7 +381,7 @@
   }
 
   /* =========================
-     INIT (ohne Alerts)
+     INIT
   ========================= */
   function init() {
     setCartBadge();
@@ -392,12 +396,11 @@
       init();
     } catch (e) {
       console.error("[an:care] Fehler in app.js", e);
-      // Absichtlich kein alert, damit dich diese Meldung nicht mehr blockiert
     }
   });
 
   /* =========================
-     Global Exports (fuer inline onclick)
+     Global Exports
   ========================= */
   window.addToCart = addToCart;
   window.clearCart = clearCart;
@@ -411,6 +414,7 @@
   window.loadPodcastEpisodes = loadPodcastEpisodes;
   window.seedPodcastEpisodes = seedPodcastEpisodes;
 })();
+
 /* =========================
    Versand und Zahlung (Prototyp)
 ========================= */
@@ -423,6 +427,7 @@
   }
 
   function safeParse(str, fallback){
+    if(str == null || str === "") return fallback;
     try { return JSON.parse(str); } catch { return fallback; }
   }
 
@@ -446,8 +451,8 @@
   }
 
   function getCartSubtotal(){
-    if(typeof loadCart !== "function") return 0;
-    const cart = loadCart() || [];
+    if(typeof window.loadCart !== "function") return 0;
+    const cart = window.loadCart() || [];
     return cart.reduce((sum, item) => {
       const p = Number(item.price || 0);
       const q = Number(item.qty || 0);
@@ -503,13 +508,20 @@
   document.addEventListener("DOMContentLoaded", () => {
     bindCheckoutUI();
 
-    // Wenn dein Warenkorb neu gerendert wird, soll die Gesamtsumme mitziehen
-    // Wir hängen uns an typische Buttons an, ohne etwas kaputt zu machen
     ["addBtn","fakePay","clear"].forEach(id => {
       const b = document.getElementById(id);
       if(b) b.addEventListener("click", () => setTimeout(renderGrandTotal, 60));
     });
+
+    // Wenn renderMiniCart aus app.js laeuft, soll die Gesamtsumme nachziehen
+    if(typeof window.renderMiniCart === "function"){
+      const orig = window.renderMiniCart;
+      window.renderMiniCart = function(){
+        const res = orig.apply(this, arguments);
+        setTimeout(renderGrandTotal, 30);
+        return res;
+      };
+    }
   });
 })();
-
 
