@@ -1133,7 +1133,8 @@ input:not([type="radio"]):not([type="checkbox"]){
 /* Text bleibt kompakt (nicht zu viele Zeilen) */
 .shopCardSub{
   margin-top: 6px;
-  max-width: 38ch; /* sorgt dafuer, dass "Reset Momente" in der Regel zusammen bleibt */
+  max-width: 42ch;     /* etwas mehr Breite */
+  white-space: normal;
 }
 
 /* Tags und Buttons sitzen direkt untereinander und bleiben oben */
