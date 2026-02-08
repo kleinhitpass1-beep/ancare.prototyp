@@ -1165,6 +1165,15 @@ input:not([type="radio"]):not([type="checkbox"]){
   object-fit: contain !important;
   display: block !important;
 }
+.shopCardRight .shopCardImage{
+  width: 78px !important;
+  height: 96px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+.shopCard .pad{
+  padding-bottom: 70px !important;
+}
 
 
 
