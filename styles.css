@@ -902,26 +902,27 @@ select, input{
   cursor: pointer;
 }
 
-/* Vorschau ist standardmäßig verborgen */
-.channelPreview{
+.channelPreview {
   position: absolute;
-  top: auto;
   bottom: 58px;
   right: 0;
+
   width: 260px;
-  max-width: 75vw;
-  height: auto;
+  height: 360px;              /* feste Höhe für sauberen Schnitt */
+  object-fit: cover;          /* schneidet sauber */
+  object-position: center;    /* mittig */
+
   border-radius: 18px;
-  border: 1px solid rgba(11,27,58,.12);
-  box-shadow: 0 20px 45px rgba(11,27,58,.18);
-  background: #fff;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+  border: none;               /* weißen Rand entfernen */
 
   opacity: 0;
   transform: translateY(8px);
   pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease;
-  z-index: 30;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 20;
 }
+
 
 /* Hover auf Badge ODER Logo zeigt Vorschau */
 .channelBadge:hover .channelPreview,
