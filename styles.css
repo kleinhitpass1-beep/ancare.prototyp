@@ -1153,6 +1153,34 @@ input:not([type="radio"]):not([type="checkbox"]){
   box-shadow:none;        /* kein Schatten */
   pointer-events:none;
 }
+/* Shop Karte kompakter machen */
+.shopCard .pad{
+  padding-bottom: 18px; /* vorher war hier viel Platz reserviert */
+}
+
+/* Abstand bei Tags und CTA reduzieren */
+.shopCard .tagRow{
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+.shopCard .ctaRow{
+  margin-top: 10px !important;
+}
+
+/* rechte Spalte etwas weiter nach rechts schieben */
+.shopCardRight{
+  min-width: 170px;      /* mehr Platz rechts -> Stick rutscht nach rechts */
+  padding-left: 10px;    /* kleiner Push nach rechts */
+}
+
+/* Stick Position feinjustieren */
+.shopCardImage{
+  margin-top: 10px;      /* näher an den Preis, macht Karte kompakter */
+  margin-right: -6px;    /* optisch etwas weiter nach rechts */
+  width: 120px;
+  height: 170px;
+  object-fit: contain;
+}
 
 
 
