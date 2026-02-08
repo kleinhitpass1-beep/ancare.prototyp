@@ -1150,6 +1150,14 @@ input:not([type="radio"]):not([type="checkbox"]){
   box-shadow: 0 10px 22px rgba(11,27,58,.08);
   pointer-events: none;
 }
+/* FORCE: Calm Bild im Shop wirklich kleiner machen */
+.shopCardRight .shopCardImage{
+  width: 78px !important;
+  height: auto !important;
+  max-height: 140px !important;   /* verhindert "zu lang" */
+  object-fit: contain !important;
+  display: block !important;
+}
 
 
 
