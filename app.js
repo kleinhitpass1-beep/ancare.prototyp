@@ -327,4 +327,63 @@ window.renderMiniCart = renderMiniCart;
 window.setCartBadge = setCartBadge;
 window.trackInterest = trackInterest;
 window.renderInterestPanel = renderInterestPanel;
+/* =========================
+   Podcast (lokal im Browser)
+   Abhaengig von storageGet/storageSet/safeJsonParse
+========================= */
+
+const PODCAST_KEY = "anker_podcast_v1";
+
+function loadPodcastEpisodes() {
+  return safeJsonParse(storageGet(PODCAST_KEY), []);
+}
+
+function savePodcastEpisodes(eps) {
+  storageSet(PODCAST_KEY, JSON.stringify(Array.isArray(eps) ? eps : []));
+}
+
+function seedPodcastEpisodes() {
+  const existing = loadPodcastEpisodes();
+  if (existing.length > 0) return;
+
+  const now = new Date();
+  const d1 = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7);
+  const d2 = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 14);
+
+  // Wichtig: audioUrl muss auf eine Datei zeigen, die im Repo liegt (z.B. episode01.mp3)
+  const eps = [
+    {
+      id: "ep01",
+      number: "01",
+      title: "Ruhig werden in 60 Sekunden",
+      teaser: "Ein kurzer Reset fuer dein Nervensystem. Ohne Druck, ohne Perfektion.",
+      description: "Du lernst einen sehr kurzen Ablauf, der dich aus dem Kopf in den Koerper bringt. Ideal vor Terminen oder nach Reizen.",
+      duration: "03:20",
+      publishedAt: d1.toISOString(),
+      audioUrl: "episode01.mp3",
+      spotifyUrl: "#",
+      appleUrl: "#",
+      webUrl: "#"
+    },
+    {
+      id: "ep02",
+      number: "02",
+      title: "Uebergaenge meistern",
+      teaser: "Wie du zwischen Aufgaben sauber umschaltest, statt dich zu verlieren.",
+      description: "Ein praktisches Mini Ritual: Stopp, Atem, naechster Schritt. Damit Uebergaenge leichter werden.",
+      duration: "04:10",
+      publishedAt: d2.toISOString(),
+      audioUrl: "episode01.mp3",
+      spotifyUrl: "#",
+      appleUrl: "#",
+      webUrl: "#"
+    }
+  ];
+
+  savePodcastEpisodes(eps);
+}
+
+/* Global fuer podcast.html */
+window.loadPodcastEpisodes = loadPodcastEpisodes;
+window.seedPodcastEpisodes = seedPodcastEpisodes;
 
