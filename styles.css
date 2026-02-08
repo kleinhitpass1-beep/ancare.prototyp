@@ -877,7 +877,7 @@ select, input{
 /* Badge sitzt oben rechts */
 .channelBadge{
   position: absolute;
-  top: 18px;
+  top: auto;
   right: 18px;
   bottom: 18px;
   width: 46px;
