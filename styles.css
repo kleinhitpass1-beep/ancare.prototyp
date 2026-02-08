@@ -832,6 +832,40 @@ select, input{
   flex:1;
   min-width:220px;
 }
+.nameHover{
+  position:relative;
+  display:inline-block;
+}
+
+.nameText{
+  font-weight:900;
+  font-size:16px;
+  cursor:default;
+}
+
+.namePreview{
+  position:absolute;
+  left:0;
+  top:28px;
+  width:160px;
+  height:auto;
+  border-radius:16px;
+  border:1px solid var(--line);
+  box-shadow: var(--shadow2);
+  background:white;
+
+  opacity:0;
+  transform: translateY(6px);
+  pointer-events:none;
+
+  transition: opacity .18s ease, transform .18s ease;
+  z-index:20;
+}
+
+.nameHover:hover .namePreview{
+  opacity:1;
+  transform: translateY(0);
+}
 
 
 
