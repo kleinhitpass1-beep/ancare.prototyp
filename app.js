@@ -3,6 +3,7 @@
    Warenkorb, Interesse, Podcast Seeds
    Speichert alles lokal im Browser
 ========================= */
+alert("app.js läuft");
 
 const CART_KEY = "ancare_cart_v1";
 const INTEREST_KEY = "ancare_interest_v1";
