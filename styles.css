@@ -919,6 +919,12 @@ select, input{
   opacity:1;
   transform: translateY(0);
 }
+/* damit die Vorschau nicht abgeschnitten wird */
+.card{
+  position: relative;
+  overflow: visible;
+}
+
 
 
 
