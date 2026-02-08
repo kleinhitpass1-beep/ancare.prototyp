@@ -905,7 +905,8 @@ select, input{
 /* Vorschau ist standardmäßig verborgen */
 .channelPreview{
   position: absolute;
-  top: 58px;
+  top: auto;
+  bottom: 58px;
   right: 0;
   width: 260px;
   max-width: 75vw;
