@@ -1110,64 +1110,62 @@ input:not([type="radio"]):not([type="checkbox"]){
 .blogCard .pad {
   padding-right: 110px;   /* schafft Platz für Bild */
 }
-/* Shop: Calm Karte sauber wie im Referenz Screenshot */
+/* Shop: Calm Karte wie Referenz (Bild rechts ohne Layout zu strecken) */
 .shopCard{
   position: relative;
   overflow: hidden;
 }
 
-/* Top Bereich: links Text, rechts Preis plus Bild */
+/* Rechts Platz reservieren, damit nichts unter das Bild läuft */
+.shopCard .pad{
+  padding-right: 190px; /* Platz für Preis und Bild */
+}
+
+/* Oben: links Name und Text, rechts nur der Preis */
 .shopCardTop{
-  display: grid;
-  grid-template-columns: 1fr 150px;
-  column-gap: 18px;
-  align-items: start;
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:flex-start;
 }
 
 .shopCardLeft{
-  min-width: 0;
+  flex:1;
+  min-width:0;
 }
 
 .shopCardRight{
-  text-align: right;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  min-width:140px;
+  text-align:right;
 }
 
-/* Fest integriertes Produktbild unter dem Preis */
+/* Bild steht rechts unter dem Preis, beeinflusst aber NICHT die Höhe der Box */
 .shopCardImage{
-  margin-top: 12px;
+  position:absolute;
+  right: 26px;
+  top: 92px;            /* exakt unterhalb des Preis Badges */
   width: 120px;
-  height: 170px;
+  height: 170px;        /* genau wie deine Zielgröße */
   object-fit: contain;
-  display: block;
   background: transparent;
   border-radius: 0;
   box-shadow: none;
   pointer-events: none;
 }
 
-/* Wichtig: keine extra Hoehe erzwingen */
-.shopCard .pad{
-  padding-bottom: 0;
-}
-
-/* Responsive: auf kleinen Screens sauber untereinander */
+/* Mobile: Bild wird normal unter den Preis gesetzt */
 @media (max-width: 720px){
-  .shopCardTop{
-    grid-template-columns: 1fr;
-  }
-
-  .shopCardRight{
-    align-items: flex-start;
-    text-align: left;
-    margin-top: 10px;
+  .shopCard .pad{
+    padding-right: 18px;
   }
 
   .shopCardImage{
+    position: static;
+    margin-top: 12px;
     width: 120px;
     height: 160px;
+    display:block;
+    margin-left:auto;
   }
 }
 
