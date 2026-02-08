@@ -957,6 +957,72 @@ input:not([type="radio"]):not([type="checkbox"]){
   .cartLayout{ grid-template-columns: 1fr; }
   .cartSide{ position: static; top:auto; }
 }
+/* Cart Layout: gleiche Höhe links rechts */
+.cartLayout{
+  display:grid;
+  grid-template-columns: 1fr 420px;
+  gap:22px;
+  align-items:stretch;
+}
+
+.cartMain,
+.cartSide{
+  min-width:0;
+}
+
+.cartSide .card{
+  height:100%;
+}
+
+.cartRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+/* Payment Optionen: klickbar, sauber */
+.payList{
+  display:grid;
+  gap:10px;
+}
+
+.payOption{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background: rgba(255,255,255,.75);
+  cursor:pointer;
+  user-select:none;
+}
+
+.payOption input[type="radio"]{
+  width:16px;
+  height:16px;
+  margin:0;
+  accent-color: var(--blue);
+  box-shadow:none;
+}
+
+.payOption .payRight{
+  color: var(--muted);
+  font-weight:800;
+}
+
+.payOption.isActive{
+  border-color: rgba(11,95,255,.35);
+  background: rgba(11,95,255,.06);
+}
+
+/* Mobile */
+@media (max-width: 980px){
+  .cartLayout{ grid-template-columns: 1fr; }
+}
 
 
 
