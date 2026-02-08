@@ -411,5 +411,105 @@
   window.loadPodcastEpisodes = loadPodcastEpisodes;
   window.seedPodcastEpisodes = seedPodcastEpisodes;
 })();
+/* =========================
+   Versand und Zahlung (Prototyp)
+========================= */
+(function(){
+  const CHECKOUT_KEY = "ancare_checkout_v1";
+
+  function formatEUR(n){
+    const v = Number(n || 0);
+    return v.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " EUR";
+  }
+
+  function safeParse(str, fallback){
+    try { return JSON.parse(str); } catch { return fallback; }
+  }
+
+  function loadCheckout(){
+    const raw = localStorage.getItem(CHECKOUT_KEY);
+    const base = safeParse(raw || "{}", {});
+    return {
+      shipping: base.shipping || "dhl_399",
+      payment: base.payment || "paypal"
+    };
+  }
+
+  function saveCheckout(next){
+    localStorage.setItem(CHECKOUT_KEY, JSON.stringify(next));
+  }
+
+  function getShippingPrice(code){
+    if(code === "dhl_399") return 3.99;
+    if(code === "pickup_0") return 0.00;
+    return 0.00;
+  }
+
+  function getCartSubtotal(){
+    if(typeof loadCart !== "function") return 0;
+    const cart = loadCart() || [];
+    return cart.reduce((sum, item) => {
+      const p = Number(item.price || 0);
+      const q = Number(item.qty || 0);
+      return sum + (p * q);
+    }, 0);
+  }
+
+  function renderGrandTotal(){
+    const el = document.getElementById("grandTotal");
+    if(!el) return;
+
+    const checkout = loadCheckout();
+    const subtotal = getCartSubtotal();
+    const shipping = getShippingPrice(checkout.shipping);
+    const grand = subtotal + shipping;
+
+    el.textContent = formatEUR(grand);
+  }
+
+  function bindCheckoutUI(){
+    const shippingSelect = document.getElementById("shippingSelect");
+    const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+
+    if(!shippingSelect && paymentRadios.length === 0) return;
+
+    const checkout = loadCheckout();
+
+    if(shippingSelect){
+      shippingSelect.value = checkout.shipping;
+      shippingSelect.addEventListener("change", () => {
+        const next = loadCheckout();
+        next.shipping = shippingSelect.value;
+        saveCheckout(next);
+        renderGrandTotal();
+      });
+    }
+
+    if(paymentRadios.length > 0){
+      paymentRadios.forEach(r => {
+        r.checked = (r.value === checkout.payment);
+        r.addEventListener("change", () => {
+          if(!r.checked) return;
+          const next = loadCheckout();
+          next.payment = r.value;
+          saveCheckout(next);
+        });
+      });
+    }
+
+    renderGrandTotal();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    bindCheckoutUI();
+
+    // Wenn dein Warenkorb neu gerendert wird, soll die Gesamtsumme mitziehen
+    // Wir hängen uns an typische Buttons an, ohne etwas kaputt zu machen
+    ["addBtn","fakePay","clear"].forEach(id => {
+      const b = document.getElementById(id);
+      if(b) b.addEventListener("click", () => setTimeout(renderGrandTotal, 60));
+    });
+  });
+})();
 
 
