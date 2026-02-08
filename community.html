@@ -15,7 +15,7 @@
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Start">
-          <img class="logo" src="logo.png" alt="an:care Logo" />
+          <img class="logo" src="logo-v2.jpg" alt="an:care Logo" />
           <span>
             an:care
             <small>Community</small>
@@ -28,6 +28,7 @@
           <a class="link" href="marketing.html">Marketing</a>
           <a class="link" href="podcast.html">Podcast</a>
           <a class="link" href="blog.html">Blog</a>
+          <a class="link" href="FAQ.html">FAQ</a>
           <a class="btn btnPrimary" href="product.html">
             Zum Produkt <span class="badge" id="cartCount">0</span>
           </a>
@@ -40,7 +41,6 @@
     <section class="section">
       <div class="container">
 
-        <!-- Header Card -->
         <div class="card shadowBig">
           <div class="padLg">
             <div class="kicker"><span class="dot" aria-hidden="true"></span> Community</div>
@@ -57,7 +57,6 @@
 
         <div style="height:18px"></div>
 
-        <!-- Community Feed -->
         <div class="card shadowBig" style="margin-bottom:18px">
           <div class="mediaTop">
             <div>
@@ -98,9 +97,7 @@
           </div>
         </div>
 
-        <!-- Calendar + Meetings -->
         <div class="grid2">
-          <!-- Kalender -->
           <div class="card shadowBig">
             <div class="mediaTop">
               <div>
@@ -125,7 +122,6 @@
             </div>
           </div>
 
-          <!-- Meetings -->
           <div class="card shadowBig">
             <div class="mediaTop">
               <div>
@@ -191,33 +187,34 @@
       <div class="container">
         <div class="foot">
           <div>
-            <strong style="color:var(--text)">an:care Community</strong><br />
-            <span>Prototyp Bereich</span>
+            <strong style="color:var(--text)">an:care</strong><br />
+            <span>Prototyp für Konzepttests und Feedback</span>
           </div>
-          <div>
-            <a class="link" href="index.html">Zur Startseite</a>
+
+          <div style="display:flex; gap:16px; flex-wrap:wrap;">
+            <a class="link" href="FAQ.html">FAQ</a>
+            <a class="link" href="impressum.html">Impressum</a>
+            <a class="link" href="datenschutz.html">Datenschutz</a>
           </div>
         </div>
       </div>
     </footer>
   </main>
 
-  <script src="app.js"></script>
+  <!-- Cache Bust, damit GitHub Pages wirklich die neue app.js nimmt -->
+  <script src="app.js?v=20260208"></script>
+
   <script>
-    /* Badge aus app.js */
+    // Mini Debug: du siehst sofort, ob app.js geladen ist
     document.addEventListener("DOMContentLoaded", () => {
+      console.log("[community] DOMContentLoaded");
+      console.log("[community] setCartBadge exists:", typeof setCartBadge);
       if (typeof setCartBadge === "function") setCartBadge();
     });
 
-    /* =========================
-       Keys
-    ========================= */
     const MEETINGS_KEY = "ancare_meetings_v1";
     const POSTS_KEY = "ancare_posts_v1";
 
-    /* =========================
-       Helpers
-    ========================= */
     function safeParse(str, fallback) {
       try { return JSON.parse(str); } catch { return fallback; }
     }
@@ -226,9 +223,6 @@
       return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate());
     }
 
-    /* =========================
-       Meetings
-    ========================= */
     function loadMeetings() {
       return safeParse(localStorage.getItem(MEETINGS_KEY) || "[]", []);
     }
@@ -314,9 +308,6 @@
 
     document.getElementById("resetForm").addEventListener("click", resetMeetingForm);
 
-    /* =========================
-       Calendar
-    ========================= */
     let viewDate = new Date();
 
     function renderMonth() {
@@ -330,10 +321,9 @@
       cellsHost.innerHTML = "";
 
       const first = new Date(year, month, 1);
-      const weekday = (first.getDay() + 6) % 7; // Mo=0
+      const weekday = (first.getDay() + 6) % 7;
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      // leading empty
       for (let i = 0; i < weekday; i++) {
         const empty = document.createElement("button");
         empty.className = "calCell calMuted";
@@ -381,9 +371,6 @@
       renderMonth();
     });
 
-    /* =========================
-       Posts (Feed)
-    ========================= */
     function loadPosts() {
       return safeParse(localStorage.getItem(POSTS_KEY) || "[]", []);
     }
@@ -434,7 +421,6 @@
         `;
       }).join("");
 
-      // Like
       host.querySelectorAll("[data-like]").forEach(btn => {
         btn.addEventListener("click", () => {
           const i = parseInt(btn.getAttribute("data-like"), 10);
@@ -445,7 +431,6 @@
         });
       });
 
-      // Toggle comments
       host.querySelectorAll("[data-toggle-comments]").forEach(btn => {
         btn.addEventListener("click", () => {
           const i = btn.getAttribute("data-toggle-comments");
@@ -454,7 +439,6 @@
         });
       });
 
-      // Submit comment
       host.querySelectorAll("[data-submit-comment]").forEach(btn => {
         btn.addEventListener("click", () => {
           const i = parseInt(btn.getAttribute("data-submit-comment"), 10);
@@ -470,7 +454,6 @@
         });
       });
 
-      // Delete post
       host.querySelectorAll("[data-del-post]").forEach(btn => {
         btn.addEventListener("click", () => {
           const i = parseInt(btn.getAttribute("data-del-post"), 10);
@@ -507,15 +490,11 @@
       renderPosts();
     });
 
-    /* =========================
-       Buttons oben
-    ========================= */
     document.getElementById("loadExamples").addEventListener("click", () => {
       const now = new Date();
       const y = now.getFullYear();
       const m = now.getMonth();
 
-      // Meetings Beispiele
       const examplesMeetings = [
         { id:"m1", title:"Community Reset Session", date: toISODate(new Date(y,m, Math.min(28, now.getDate()+2))), time:"19:00", duration:30, place:"Online · Zoom Link" },
         { id:"m2", title:"Austausch Runde: Stress reduzieren", date: toISODate(new Date(y,m, Math.min(28, now.getDate()+5))), time:"18:30", duration:45, place:"Online · Zoom Link" },
@@ -523,7 +502,6 @@
       ];
       saveMeetings(examplesMeetings);
 
-      // Posts Beispiele
       const examplesPosts = [
         { id:"p1", author:"Mara", content:"Ich habe an:care heute vor einem Termin genutzt und war direkt ruhiger.", ts:new Date(Date.now()-86400000*2).toISOString(), likes:2, comments:["Klingt stark. Welche Sorte?","Ich brauche das auch für Termine."] },
         { id:"p2", author:"Jonas", content:"Mini Ritual am Abend: 4 Atemzüge + Fokus auf Ausatmen. Hilft mir total.", ts:new Date(Date.now()-86400000*1).toISOString(), likes:5, comments:["Danke fürs Teilen!"] },
@@ -547,14 +525,10 @@
       alert("Alles gelöscht (Prototyp).");
     });
 
-    /* =========================
-       Init
-    ========================= */
     renderMonth();
     renderMeetings();
     renderPosts();
   </script>
 </body>
 </html>
-
 
