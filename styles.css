@@ -930,6 +930,31 @@ select, input{
   opacity: 1;
   transform: translateY(0);
 }
+/* Warenkorb Layout: links Inhalt, rechts Versand und Zahlung */
+.cartLayout{
+  display:grid;
+  grid-template-columns: 1fr 420px;
+  gap:22px;
+  align-items:start;
+}
+
+.cartRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.cartSide{
+  position: sticky;
+  top: 92px;
+}
+
+@media (max-width: 980px){
+  .cartLayout{ grid-template-columns: 1fr; }
+  .cartSide{ position: static; top:auto; }
+}
 
 
 
