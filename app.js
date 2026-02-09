@@ -638,9 +638,13 @@ document.addEventListener("DOMContentLoaded", () => {
   io.observe(block);
 });
 window.addEventListener("load", () => {
+  const nlOverlay = document.querySelector(".nlOverlay");
+  if (!nlOverlay) return;
+
   setTimeout(() => {
     nlOverlay.classList.add("isOpen");
-  }, 10000); // 10 Sekunden
+  }, 10000);
 });
+
 
 
