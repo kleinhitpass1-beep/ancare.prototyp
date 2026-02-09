@@ -1339,6 +1339,12 @@ input:not([type="radio"]):not([type="checkbox"]){
   background:#ef4444;
   box-shadow:0 0 0 4px rgba(239,68,68,.15);
 }
+/* Blog Titel einzeilig darstellen */
+.blogCard h3{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 
 
