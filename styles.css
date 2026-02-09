@@ -1223,7 +1223,7 @@ input:not([type="radio"]):not([type="checkbox"]){
 }
 /* Vision: sitzt sauber im weißen Streifen, keine Überschneidung */
 .visionSection{
-  padding: -10px 0 -10px;     /* kompakter -> passt in den weißen Streifen */
+  padding: -20px 0 -20px;     /* kompakter -> passt in den weißen Streifen */
   background: transparent;
 }
 
@@ -1237,10 +1237,10 @@ input:not([type="radio"]):not([type="checkbox"]){
 
 /* "Unsere Vision" kleiner damit es sicher passt */
 .visionLabel{
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: -0.6px;
   line-height: 1.05;
-  font-size: clamp(30px, 4vw, 56px);
+  font-size: clamp(30px, 4vw, 50px);
   color: var(--text);
 
   opacity: 0;
