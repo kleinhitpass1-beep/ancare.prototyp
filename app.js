@@ -637,6 +637,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   io.observe(block);
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const block = document.getElementById("visionBlock");
+  const label = document.getElementById("visionLabel");
+  const text  = document.getElementById("visionText");
+  const line  = document.getElementById("visionUnderline");
+
+  if (!block || !label || !text) return;
+
+  // Index für Wort Animation setzen
+  const spans = text.querySelectorAll("span");
+  spans.forEach((s, i) => s.style.setProperty("--i", i));
+
+  const reveal = () => {
+    label.classList.add("isVisible");
+    text.classList.add("isVisible");
+    if (line) line.classList.add("isVisible");
+  };
+
+  // Falls IntersectionObserver nicht verfügbar: trotzdem zeigen
+  if (!("IntersectionObserver" in window)) {
+    setTimeout(reveal, 250);
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        reveal();
+        io.disconnect();
+      }
+    });
+  }, { threshold: 0.35 });
+
+  io.observe(block);
+});
 
 
 
