@@ -530,5 +530,23 @@
     });
   });
 })();
+// Vision Scroll Reveal
+(() => {
+  const els = document.querySelectorAll(".revealOnScroll");
+  if (!els.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("isVisible");
+        }
+      });
+    },
+    { threshold: 0.35 }
+  );
+
+  els.forEach(el => observer.observe(el));
+})();
 
 
