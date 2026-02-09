@@ -1256,7 +1256,9 @@ input:not([type="radio"]):not([type="checkbox"]){
 .visionLineWrap{
   width: min(980px, 92vw);
   position: relative;
+  display: inline-block; /* sorgt: Breite = Textbreite */
 }
+
 
 /* Satz etwas größer, aber kontrolliert */
 .visionText{
@@ -1287,17 +1289,22 @@ input:not([type="radio"]):not([type="checkbox"]){
 
 /* Durchgehende Linie unter dem ganzen Satz (nicht gestrichelt) */
 .visionUnderline{
-  height: 2px;                 /* dünn */
+.visionUnderline{
+  position: absolute;
+  left: 0;
+  bottom: -6px;              /* ganz nah unter den Text */
+  height: 3px;               /* dünn */
   border-radius: 999px;
-  background: rgba(11,95,255,.75); /* kräftiger blau Ton */
-  width: 0;
-  margin: 30px auto 0;         /* unter den Text, mittig */
+  background: rgba(11,95,255,.80); /* etwas kräftiger */
+
+  width: 0;                  /* Animation Start */
   transition: width 1.1s ease;
 }
 
 .visionUnderline.isVisible{
-  width: 100%;
+  width: 100%;               /* exakt so lang wie der Text */
 }
+
 
 /* Mobile fein */
 @media (max-width: 720px){
