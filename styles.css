@@ -1339,6 +1339,42 @@ input:not([type="radio"]):not([type="checkbox"]){
   background:#ef4444;
   box-shadow:0 0 0 4px rgba(239,68,68,.15);
 }
+/* Vision: dezenter Kasten im weißen Bereich */
+.visionSection{
+  padding: 18px 0 10px;
+}
+
+.visionCard{
+  width: min(980px, 92vw);
+  margin: 0 auto;
+  padding: 18px 20px 16px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.92);
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 55px rgba(11,27,58,.08);
+}
+
+.visionGrid{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap: 10px;
+}
+
+/* leichte Feinjustierung der Typo im Kasten */
+.visionLabel{
+  margin: 0;
+}
+
+.visionText{
+  margin: 0;
+}
+
+/* Nur den Bereich darunter weiter nach unten schieben */
+.visionSection ~ .section{
+  padding-top: 34px;
+}
 
 
 
