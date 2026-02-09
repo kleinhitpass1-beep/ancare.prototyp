@@ -1223,7 +1223,7 @@ input:not([type="radio"]):not([type="checkbox"]){
 }
 /* Vision: sitzt sauber im weißen Streifen, keine Überschneidung */
 .visionSection{
-  padding: 6px 0 6px;     /* kompakter -> passt in den weißen Streifen */
+  padding: 4px 0 4px;     /* kompakter -> passt in den weißen Streifen */
   background: transparent;
 }
 
@@ -1254,8 +1254,8 @@ input:not([type="radio"]):not([type="checkbox"]){
 
 /* Wrap begrenzt die Breite -> bleibt im weißen Bereich */
 .visionLineWrap{
-  width: min(980px, 92vw);
-  position: relative;
+  width: min(920px, 90vw);
+    margin: 0 auto;
 }
 
 /* Satz etwas größer, aber kontrolliert */
