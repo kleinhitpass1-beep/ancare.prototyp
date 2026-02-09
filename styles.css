@@ -1221,10 +1221,11 @@ input:not([type="radio"]):not([type="checkbox"]){
   min-width: 240px;
   justify-content:center;
 }
-/* Vision: sitzt sauber im weißen Streifen, keine Überschneidung */
+/* Vision Bereich sauber im weissen Streifen, ohne Ueberschneidung */
 .visionSection{
-  padding: -20px 0 -20px;     /* kompakter -> passt in den weißen Streifen */
-  background: transparent;
+  background: var(--white);
+  padding: 18px 0 8px;
+  margin: 0;
 }
 
 .visionGrid{
@@ -1235,7 +1236,7 @@ input:not([type="radio"]):not([type="checkbox"]){
   gap: 10px;
 }
 
-/* "Unsere Vision" kleiner damit es sicher passt */
+/* Unsere Vision */
 .visionLabel{
   font-weight: 900;
   letter-spacing: -0.6px;
@@ -1246,21 +1247,28 @@ input:not([type="radio"]):not([type="checkbox"]){
   opacity: 0;
   transform: translateY(8px);
 }
+
 .visionLabel.isVisible{
   opacity: 1;
   transform: translateY(0);
   transition: opacity .35s ease, transform .35s ease;
 }
 
-/* Wrap begrenzt die Breite -> bleibt im weißen Bereich */
+/* Wrap begrenzt und zentriert, aber ohne Einfluss auf den Bereich darunter */
 .visionLineWrap{
   width: min(980px, 92vw);
-  position: relative;
-  display: inline-block; /* sorgt: Breite = Textbreite */
+  display:flex;
+  justify-content:center;
 }
 
+/* Wichtig: das ist der Container, der die Textbreite bestimmt */
+.visionTextWrap{
+  position: relative;
+  display: inline-block; /* sorgt: Unterstrich laeuft exakt unter dem Satz */
+  padding-bottom: 4px;   /* kleiner Abstand, damit der Strich nicht klebt */
+}
 
-/* Satz etwas größer, aber kontrolliert */
+/* Satz */
 .visionText{
   margin: 0;
   font-weight: 900;
@@ -1270,7 +1278,7 @@ input:not([type="radio"]):not([type="checkbox"]){
   color: var(--text);
 }
 
-/* Wörter kommen nacheinander */
+/* Woerter kommen nacheinander */
 .visionText span{
   display:inline-block;
   margin: 0 8px;
@@ -1287,30 +1295,29 @@ input:not([type="radio"]):not([type="checkbox"]){
   to{ opacity: 1; transform: translateY(0); }
 }
 
-/* Durchgehende Linie unter dem ganzen Satz (nicht gestrichelt) */
+/* Unterstrich: direkt unter dem Satz und exakt Satzbreite */
 .visionUnderline{
-.visionUnderline{
-  position: absolute;
+  position:absolute;
   left: 0;
-  bottom: -6px;              /* ganz nah unter den Text */
-  height: 3px;               /* dünn */
+  right: 0;
+  bottom: 0;                  /* direkt unter dem Text */
+  height: 2px;
   border-radius: 999px;
-  background: rgba(11,95,255,.80); /* etwas kräftiger */
+  background: rgba(11,95,255,.78);
 
-  width: 0;                  /* Animation Start */
-  transition: width 1.1s ease;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 1.1s ease;
 }
 
 .visionUnderline.isVisible{
-  width: 100%;               /* exakt so lang wie der Text */
+  transform: scaleX(1);
 }
 
-
-/* Mobile fein */
+/* Mobile */
 @media (max-width: 720px){
-  .visionSection{ padding: 16px 0 12px; }
+  .visionSection{ padding: 16px 0 8px; }
   .visionText span{ margin: 0 6px; }
-  .visionUnderline{ height: 4px; margin-top: 8px; }
+  .visionTextWrap{ padding-bottom: 3px; }
+  .visionUnderline{ height: 2px; }
 }
-
-
