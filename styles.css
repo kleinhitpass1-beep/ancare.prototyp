@@ -1310,4 +1310,26 @@ input:not([type="radio"]):not([type="checkbox"]){
   .visionText span{ margin: 0 6px; }
   .visionUnderline{ height: 4px; margin-top: 8px; }
 }
+.visionTextWrap{
+  position: relative;
+  display: inline-block;   /* Textbreite = Containerbreite */
+}
+
+/* Unterstrich: exakt die Textbreite, mittig, näher am Text */
+.visionUnderline{
+  position: absolute;
+  left: 0;
+  bottom: -8px;            /* näher unter den Text (ggfs. -6px) */
+  height: 4px;             /* dünner, aber sichtbar */
+  border-radius: 999px;
+  background: rgba(11,95,255,.90);
+
+  width: 0;                /* Animation Start */
+  transition: width 1.1s ease;
+}
+
+/* Wenn sichtbar: exakt unter dem Text bis zum Ende */
+.visionUnderline.isVisible{
+  width: 100%;
+}
 
