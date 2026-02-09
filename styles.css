@@ -1223,43 +1223,52 @@ input:not([type="radio"]):not([type="checkbox"]){
 }
 /* Vision Bereich */
 .visionSection{
-  padding: 30px 0 40px;
+  padding: 34px 0 46px;
+  display:flex;
+  justify-content:center;
 }
 
 .visionTitle{
-  margin: 0 0 20px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.2;
-  letter-spacing: -0.4px;
-  color: rgba(47,140,255,.95); /* hellblau */
-  max-width: 65ch;
+  margin: 0;
+  text-align:center;
+  font-size: clamp(34px, 3.4vw, 48px); /* größer */
+  line-height: 1.15;
+  letter-spacing: -0.6px;
+  color: var(--text); /* schwarz */
+  max-width: 22ch; /* optisch mittig, nicht zu breit */
+  position: relative;
 }
 
-/* Scroll Animation */
-.revealOnScroll{
+/* dünne blaue Unterlegung */
+.visionTitle:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom: 6px;
+  width: 0%;
+  height: 4px; /* viel dünner */
+  background: rgba(47,140,255,.35);
+  border-radius: 999px;
+  transition: width 1.4s ease;
+  z-index: -1; /* Unterlegung hinter Text */
+}
+
+/* Wort für Wort Animation */
+.visionWords span{
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity .9s ease, transform .9s ease;
+  transform: translateY(10px);
+  display:inline-block;
+  transition: opacity .6s ease, transform .6s ease;
+  margin-right: 8px;
 }
 
-.revealOnScroll.isVisible{
+/* Sichtbar State (kommt per JS) */
+.visionWords.isVisible span{
   opacity: 1;
   transform: translateY(0);
-  background-image: linear-gradient(transparent 72%, rgba(255,0,0,.18) 0);
-  background-size: 0% 100%;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  animation: visionUnderline 1.8s ease-out .4s forwards;
 }
 
-@keyframes visionUnderline{
-  to{ background-size: 100% 100%; }
+.visionWords.isVisible:after{
+  width: 100%;
 }
-
-
-
-
-
-
-
-
