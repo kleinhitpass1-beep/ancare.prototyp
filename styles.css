@@ -594,6 +594,8 @@ input:not([type="radio"]):not([type="checkbox"]){
   backdrop-filter: blur(8px);
   z-index: 9999;
 }
+.nlOverlay.isOpen{ display:flex; 
+}
 
 .nlModal{
   width: min(560px, 100%);
