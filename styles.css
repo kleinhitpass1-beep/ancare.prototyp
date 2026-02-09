@@ -1289,7 +1289,7 @@ input:not([type="radio"]):not([type="checkbox"]){
 /* Durchgehende Linie unter dem ganzen Satz (nicht gestrichelt) */
 .visionUnderline{
   height: 2px;                 /* dünn */
-  border-radius: 999px;
+  border-radius: 800px;
   background: rgba(11,95,255,.75); /* kräftiger blau Ton */
   width: 0;
   margin: 1px auto 0;         /* unter den Text, mittig */
