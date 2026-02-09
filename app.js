@@ -530,23 +530,31 @@
     });
   });
 })();
-// Vision Scroll Reveal
+// Vision: Wort-für-Wort Reveal + Unterlegung
 (() => {
-  const els = document.querySelectorAll(".revealOnScroll");
-  if (!els.length) return;
+  const el = document.getElementById("visionLine");
+  if (!el) return;
+
+  const words = Array.from(el.querySelectorAll("span"));
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("isVisible");
-        }
+        if (!entry.isIntersecting) return;
+
+        el.classList.add("isVisible");
+
+        words.forEach((w, i) => {
+          w.style.transitionDelay = `${i * 0.12}s`; // Wort für Wort
+        });
+
+        observer.disconnect();
       });
     },
-    { threshold: 0.35 }
+    { threshold: 0.45 }
   );
 
-  els.forEach(el => observer.observe(el));
+  observer.observe(el);
 })();
 
 
