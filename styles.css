@@ -1297,5 +1297,10 @@ input:not([type="radio"]):not([type="checkbox"]){
 .visionSection + .section{
   margin-top: 40px;
 }
+/* Nur den Bereich "So funktioniert an:care" weiter nach unten schieben */
+.visionSection + .section .sectionHeader{
+  margin-top: 60px;
+}
+
 
 
