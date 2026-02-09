@@ -1256,6 +1256,7 @@ input:not([type="radio"]):not([type="checkbox"]){
 .visionLineWrap{
   width: min(980px, 92vw);
   position: relative;
+  margin: 6ptx auto 0;
 }
 
 /* Satz etwas größer, aber kontrolliert */
