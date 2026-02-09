@@ -637,17 +637,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   io.observe(block);
 });
-document.addEventListener("DOMContentLoaded", () => {
-  const nlOverlay = document.querySelector(".nlOverlay");
-  if (!nlOverlay) return;
 
-  // zur Sicherheit: beim Laden geschlossen halten
-  nlOverlay.classList.remove("isOpen");
-
-  setTimeout(() => {
-    nlOverlay.classList.add("isOpen");
-  }, 10000); // 10 Sekunden
-});
 
 
 
