@@ -1447,6 +1447,11 @@ input:not([type="radio"]):not([type="checkbox"]){
   transition: width 1.1s ease;
 }
 .visionUnderline.isVisible{ width:100%; }
+/* Nur die echte Vision zeigen, doppelte Vision Sections ausblenden */
+.visionSection:not(#vision){
+  display: none !important;
+}
+
 
 
 
