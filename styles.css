@@ -1223,7 +1223,7 @@ input:not([type="radio"]):not([type="checkbox"]){
 }
 /* Vision: sitzt sauber im weißen Streifen, keine Überschneidung */
 .visionSection{
-  padding: 1px 0 1px;     /* kompakter -> passt in den weißen Streifen */
+  padding: -10px 0 -10px;     /* kompakter -> passt in den weißen Streifen */
   background: transparent;
 }
 
