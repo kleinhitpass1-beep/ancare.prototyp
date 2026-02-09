@@ -1293,6 +1293,7 @@ input:not([type="radio"]):not([type="checkbox"]){
   .visionText span{ margin: 0 6px; }
   .visionUnderline{ height: 4px; margin-top: 8px; }
 }
+.section{padding:18px 0}
 .visionSection + .section{
   margin-top: 40px;
 }
