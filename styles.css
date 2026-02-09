@@ -1345,6 +1345,9 @@ input:not([type="radio"]):not([type="checkbox"]){
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.blogCard .pad{
+  padding-right: 130px; /* statt 110px */
+}
 
 
 
