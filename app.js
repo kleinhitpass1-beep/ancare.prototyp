@@ -607,5 +607,27 @@
 
   observer.observe(block);
 })();
+document.addEventListener("DOMContentLoaded", () => {
+  const block = document.getElementById("visionBlock");
+  const label = document.getElementById("visionLabel");
+  const text = document.getElementById("visionText");
+  if (!block || !label || !text) return;
+
+  const spans = Array.from(text.querySelectorAll("span"));
+  spans.forEach((s, idx) => s.style.setProperty("--i", idx));
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+
+      label.classList.add("isVisible");
+      setTimeout(() => text.classList.add("isVisible"), 220);
+
+      io.disconnect();
+    });
+  }, { threshold: 0.55 });
+
+  io.observe(block);
+});
 
 
