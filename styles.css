@@ -1455,6 +1455,12 @@ input:not([type="radio"]):not([type="checkbox"]){
 .visionCard:not(#visionCardMain){
   display: none !important;
 }
+/* Vision Section darf KEIN eigenes Box Styling haben */
+.visionSection{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
 
 
 
