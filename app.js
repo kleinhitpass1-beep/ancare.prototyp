@@ -610,18 +610,26 @@
 document.addEventListener("DOMContentLoaded", () => {
   const block = document.getElementById("visionBlock");
   const label = document.getElementById("visionLabel");
-  const text = document.getElementById("visionText");
-  if (!block || !label || !text) return;
+  const text  = document.getElementById("visionText");
+  const line  = document.getElementById("visionUnderline");
+  if (!block || !label || !text || !line) return;
 
   const spans = Array.from(text.querySelectorAll("span"));
-  spans.forEach((s, idx) => s.style.setProperty("--i", idx));
+  spans.forEach((s, i) => s.style.setProperty("--i", i));
 
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
 
       label.classList.add("isVisible");
-      setTimeout(() => text.classList.add("isVisible"), 220);
+
+      setTimeout(() => {
+        text.classList.add("isVisible");
+      }, 220);
+
+      setTimeout(() => {
+        line.classList.add("isVisible");
+      }, 380);
 
       io.disconnect();
     });
@@ -629,5 +637,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   io.observe(block);
 });
+
 
 
