@@ -1237,7 +1237,7 @@ input:not([type="radio"]):not([type="checkbox"]){
 
 /* "Unsere Vision" kleiner damit es sicher passt */
 .visionLabel{
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: -0.6px;
   line-height: 1.05;
   font-size: clamp(30px, 4vw, 50px);
