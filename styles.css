@@ -1294,7 +1294,7 @@ input:not([type="radio"]):not([type="checkbox"]){
   .visionUnderline{ height: 4px; margin-top: 8px; }
 }
 .section:first-of-type{
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 
