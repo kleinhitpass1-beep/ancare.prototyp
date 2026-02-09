@@ -1232,12 +1232,14 @@ input:not([type="radio"]):not([type="checkbox"]){
   width: min(1160px, 100%);
   padding: 0 18px;
   display:grid;
-  grid-template-columns: auto 1fr; /* 2 Spalten */
-  column-gap: 26px;
+  grid-template-columns: 1fr;  /* untereinander */
+  row-gap: 14px;
   align-items: center;
-  justify-content:center;
+  justify-items: center;       /* mittig */
+  text-align:center;
   margin: 0 auto;
 }
+
 
 /* links: "Unsere Vision:" */
 .visionLabel{
@@ -1262,12 +1264,14 @@ input:not([type="radio"]):not([type="checkbox"]){
   font-weight: 900;
   letter-spacing: -.8px;
   color: var(--text);
-  font-size: clamp(36px, 3.8vw, 56px); /* deutlich größer */
+  font-size: clamp(40px, 4.4vw, 64px); /* größer als vorher */
   line-height: 1.15;
   display:flex;
   flex-wrap: wrap;
   gap: 12px;
+  justify-content:center;
 }
+
 
 /* Wörter kommen nacheinander */
 .visionText span{
@@ -1282,14 +1286,15 @@ input:not([type="radio"]):not([type="checkbox"]){
 .visionUnderline{
   position: absolute;
   left: 0;
-  bottom: 6px;
-  height: 6px;                 /* dünn, aber sichtbar */
-  width: 0px;                  /* JS setzt Breite */
-  background: rgba(47,140,255,.32);
+  bottom: -8px;                 /* unter dem Text */
+  height: 4px;                  /* kleiner/dünner */
+  width: 0px;                   /* JS setzt Breite */
+  background: rgba(11,95,255,.55); /* kräftiger blau */
   border-radius: 999px;
   z-index: 1;
   transition: width .35s ease, transform .35s ease;
 }
+
 
 /* Sichtbar States */
 .visionGrid.isVisible .visionLabel{
