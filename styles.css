@@ -1293,15 +1293,6 @@ input:not([type="radio"]):not([type="checkbox"]){
   .visionText span{ margin: 0 6px; }
   .visionUnderline{ height: 4px; margin-top: 8px; }
 }
-.section{padding:18px 0}
-/* Nur den Bereich "So funktioniert an:care" weiter nach unten schieben */
-.visionSection + .section .sectionHeader{
-  margin-top: 60px;
-}
-/* Nur "So funktioniert an:care" nach unten schieben */
-.howHeader{
-  margin-top: 60px;
-}
 
 
 
