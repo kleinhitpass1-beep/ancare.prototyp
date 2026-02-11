@@ -1863,22 +1863,23 @@ html{ scroll-behavior:smooth; }
 
 /* Vorschau Bild wie bei Social Preview */
 .podcastPreview{
-  position:absolute;
-  left:50%;
-  top:-12px;
-  transform: translate(-50%, -100%) translateY(8px);
-  width:260px;
-  max-width: 70vw;
-  height:auto;
-  border-radius:18px;
-  border:1px solid rgba(11,27,58,.12);
+  position: absolute;
+  top: auto;
+  bottom: 58px;
+  right: 0;
+  width: 260px;
+  max-width: 75vw;
+  height: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(11,27,58,.12);
   box-shadow: 0 20px 45px rgba(11,27,58,.18);
-  background:#fff;
+  background: #fff;
 
-  opacity:0;
-  pointer-events:none;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
   transition: opacity .2s ease, transform .2s ease;
-  z-index:40;
+  z-index: 30;
 }
 
 .podcastLink:hover .podcastPreview{
