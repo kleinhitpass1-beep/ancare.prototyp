@@ -1461,6 +1461,17 @@ input:not([type="radio"]):not([type="checkbox"]){
   border: none !important;
   box-shadow: none !important;
 }
+/* Vision Block exakt zentrieren */
+.visionSection{
+  display: flex;
+  justify-content: center;
+}
+
+.visionCard{
+  width: 100%;
+  max-width: 900px;   /* leicht kompakter, wirkt zentrierter */
+  margin: 0 auto;
+}
 
 
 
