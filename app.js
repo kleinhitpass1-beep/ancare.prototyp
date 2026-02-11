@@ -672,6 +672,114 @@ document.addEventListener("DOMContentLoaded", () => {
 
   io.observe(block);
 });
+(function(){
+  const ratingSummaryEl = document.getElementById("ratingSummary");
+  const reviewsSummaryEl = document.getElementById("reviewsSummary");
+  const reviewsListEl = document.getElementById("reviewsList");
+
+  // Wenn wir nicht auf product.html sind oder Elemente fehlen, abbrechen
+  if(!ratingSummaryEl && !reviewsSummaryEl && !reviewsListEl) return;
+
+  // Prototyp Daten
+  const reviews = [
+    { name: "Laura", date: "2025 08 01", rating: 5, text: "Sehr beruhigend. Ich nutze ihn vor Terminen und abends. Unauffällig und schnell." },
+    { name: "Timo", date: "2025 07 28", rating: 4, text: "Gutes Ritual für Übergänge. Für mich hilft es vor allem nach viel Input und Social Media." },
+    { name: "Mara", date: "2025 07 20", rating: 5, text: "Einfach, klar, angenehm. Genau das, was ich in stressigen Momenten brauche." },
+    { name: "Jonas", date: "2025 07 12", rating: 4, text: "Schönes Produktgefühl. Wirkung ist subtil, aber der Reset Moment ist da." }
+  ];
+
+  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+  function starsHTML(rating){
+    const r = clamp(Number(rating) || 0, 0, 5);
+    let html = `<span class="stars" aria-label="${r} von 5 Sternen">`;
+    for(let i=1;i<=5;i++){
+      const on = i <= r ? "isOn" : "";
+      html += `<span class="star ${on}" aria-hidden="true">★</span>`;
+    }
+    html += `</span>`;
+    return html;
+  }
+
+  function avgRating(list){
+    if(!list.length) return 0;
+    const sum = list.reduce((a, x) => a + (Number(x.rating)||0), 0);
+    return sum / list.length;
+  }
+
+  function distCounts(list){
+    const counts = {1:0,2:0,3:0,4:0,5:0};
+    list.forEach(r => {
+      const v = clamp(Number(r.rating)||0, 1, 5);
+      counts[v] += 1;
+    });
+    return counts;
+  }
+
+  function renderRatingRow(){
+    if(!ratingSummaryEl) return;
+    const avg = avgRating(reviews);
+    const count = reviews.length;
+
+    ratingSummaryEl.innerHTML = `
+      ${starsHTML(Math.round(avg))}
+      <span class="ratingMeta">
+        <span class="ratingValue">${avg.toFixed(1)}</span>
+        <span>(${count} Rezensionen)</span>
+      </span>
+    `;
+  }
+
+  function renderReviews(){
+    if(!reviewsSummaryEl || !reviewsListEl) return;
+
+    const avg = avgRating(reviews);
+    const count = reviews.length;
+    const counts = distCounts(reviews);
+
+    const max = Math.max(1, ...Object.values(counts));
+
+    reviewsSummaryEl.innerHTML = `
+      <h3>Bewertung</h3>
+      <div class="avgRow">
+        <div>
+          <div class="avgBig">${avg.toFixed(1)}</div>
+          <div style="margin-top:6px">${starsHTML(Math.round(avg))}</div>
+        </div>
+        <div class="countSmall">${count} Rezensionen</div>
+      </div>
+
+      <div class="dist">
+        ${[5,4,3,2,1].map(s => {
+          const pct = Math.round((counts[s] / max) * 100);
+          return `
+            <div class="distRow">
+              <div>${s} Sterne</div>
+              <div class="distBar"><div class="distFill" style="width:${pct}%"></div></div>
+              <div style="text-align:right">${counts[s]}</div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+
+    reviewsListEl.innerHTML = reviews.map((r, idx) => `
+      <div class="reviewItem">
+        <div class="reviewHead">
+          <div>
+            <div class="reviewName">${r.name}</div>
+            <div style="margin-top:6px">${starsHTML(r.rating)}</div>
+          </div>
+          <div class="reviewDate">${r.date}</div>
+        </div>
+        <p class="reviewText">${r.text}</p>
+      </div>
+    `).join("");
+  }
+
+  renderRatingRow();
+  renderReviews();
+})();
 
 
 
