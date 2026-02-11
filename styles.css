@@ -1264,18 +1264,18 @@ html { scroll-behavior: smooth; }
   line-height:1;
 }
 .pStar{
-  font-size:13px;
+  font-size:15px;
   color:#e0e0e0;
 }
 .pStar.isOn{ color:#f3c319; }
 .productRatingValue{
   font-weight:900;
-  font-size:17px;
+  font-size:18px;
   line-height:1;
 }
 .productRatingCount{
   font-weight:800;
-  font-size:13px;
+  font-size:18px;
   color:var(--muted);
   line-height:1;
 }
@@ -1316,7 +1316,22 @@ html { scroll-behavior: smooth; }
   border-radius:6px;
   display:block;
 }
-
+.podcastPreview{
+  position:absolute;
+  left:50%;
+  bottom: calc(100% + 12px);
+  transform: translateX(-50%) translateY(10px);
+  width:260px;
+  max-width:70vw;
+  border-radius:16px;
+  box-shadow: 0 20px 45px rgba(11,27,58,.18);
+  border:1px solid rgba(11,27,58,.12);
+  background:#fff;
+  opacity:0;
+  pointer-events:none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index:99999;
+}
 .podcastLink:hover .podcastPreview{
   opacity:1;
   transform: translateX(-50%) translateY(0);
@@ -1324,58 +1339,6 @@ html { scroll-behavior: smooth; }
 
 /* Damit Preview nie abgeschnitten wird */
 .ctaRow{ overflow: visible; }
-.podcastPreview{
-  position: absolute;
-  top: auto;
-  bottom: 58px;
-  right: 0;
-  width: 260px;
-  max-width: 75vw;
-  height: auto;
-  border-radius: 18px;
-  border: 1px solid rgba(11,27,58,.12);
-  box-shadow: 0 20px 45px rgba(11,27,58,.18);
-  background:#fff;
-  opacity: 0;
-  transform: translateY(8px);
-  pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease;
-  z-index: 30;
-}
-/* Shop Calm: kleines Logo neben dem Titel, ohne Layout Verzerrung */
-.shopTitleRow{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.shopMiniLogo{
-  width:36px;
-  height:36px;
-  flex:0 0 36px;
-  border-radius:10px;
-  object-fit:cover;
-  border:1px solid var(--line);
-  box-shadow: 0 8px 18px rgba(11,27,58,.08);
-  background: rgba(255,255,255,.85);
-}
-/* Vision: fest mittig im Layout, stabil */
-#vision.visionSection{
-  width:100%;
-  display:flex;
-  justify-content:center;
-  padding: 18px 0 10px;
-}
-
-#vision .visionCard{
-  width: min(980px, 92vw);
-  margin-left:auto;
-  margin-right:auto;
-}
-
-
-
-
 
 
 
