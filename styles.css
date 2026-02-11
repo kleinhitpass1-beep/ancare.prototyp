@@ -1941,6 +1941,15 @@ html{ scroll-behavior:smooth; }
   transform: none !important;
   transition: none !important;
 }
+/* SHOP FIX – neutralisiert globale Experimente */
+.section .card {
+  transform: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.section .card:hover {
+  transform: none !important;
+}
 
 
 
