@@ -1781,7 +1781,7 @@ html {
 .productRatingLink{
   display:inline-flex;
   align-items:center;
-  gap:12px;
+  gap:8px;
   text-decoration:none;
   color:var(--text);
   font-family:var(--sans);
@@ -1797,7 +1797,7 @@ html {
 }
 
 .pStar{
-  font-size:18px;
+  font-size:15px;
   color:#e0e0e0; /* aus */
 }
 
@@ -1807,7 +1807,7 @@ html {
 
 .productRatingValue{
   font-weight:900;
-  font-size:22px;
+  font-size:18px;
   line-height:1;
 }
 
