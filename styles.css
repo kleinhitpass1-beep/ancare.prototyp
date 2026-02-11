@@ -1453,3 +1453,26 @@ html { scroll-behavior: smooth; }
     transform: translateY(0);
   }
 }
+/* --- FIX: Shop Grid auf Desktop stabil (keine verzogenen Cards) --- */
+@media (min-width: 981px){
+  .grid3{
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: stretch;
+  }
+  .grid3 > .card{
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* speziell Calm Card */
+  .shopCard,
+  .shopCardTop,
+  .shopCardLeft,
+  .shopCardRight{
+    min-width: 0;
+    width: 100%;
+  }
+  .shopCardTop{
+    align-items: flex-start;
+  }
+}
