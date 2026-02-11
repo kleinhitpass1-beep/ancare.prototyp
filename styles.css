@@ -1423,5 +1423,35 @@ html { scroll-behavior: smooth; }
   opacity: 1;
   transform: translateY(0);
 }
+/* Vision Headline stärker und größer */
+.visionLabel{
+  font-weight: 950;
+  letter-spacing: -0.8px;
+  line-height: 1.05;
+  font-size: clamp(34px, 4.5vw, 56px);
+  color: var(--text);
+}
+.visionText{
+  font-weight: 800;
+  font-size: clamp(20px, 2.2vw, 34px);
+  letter-spacing: -0.3px;
+  line-height: 1.15;
+}
+.visionLabel.isVisible{
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+.visionText.isVisible span{
+  animation: visionWordIn .7s ease forwards;
+  animation-delay: calc(var(--i) * 0.18s);
+}
+@keyframes visionWordIn{
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 
